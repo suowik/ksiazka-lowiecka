@@ -9,6 +9,7 @@ module.exports = {
         pretendRequest(email, pass, (res) => {
             if (res.authenticated) {
                 localStorage.token = res.token;
+                localStorage.roles = res.roles;
                 if (cb) cb(true);
                 this.onChange(true)
             } else {
@@ -28,6 +29,10 @@ module.exports = {
         this.onChange(false)
     },
 
+    roles(){
+      return localStorage.roles || []
+    },
+
     loggedIn() {
         return !!localStorage.token
     },
@@ -40,6 +45,7 @@ function pretendRequest(email, pass, cb) {
         if (email === 'admin' && pass === 'admin') {
             cb({
                 authenticated: true,
+                roles: ['admin','user'],
                 token: Math.random().toString(36).substring(7)
             })
         } else {
