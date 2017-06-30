@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import { Link } from 'react-router'
-import auth from './auth/auth.js'
+import React, {Component} from "react";
+import auth from "./auth/auth.js";
+import Navigation from "./common/Navigation.js";
 
 class Layout extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             loggedIn: auth.loggedIn()
@@ -26,15 +26,8 @@ class Layout extends Component {
     render() {
         return (
             <div>
+                <Navigation/>
                 {this.props.children}
-                <br/>
-                <br/>
-                <br/>
-                <div className="row hidden-print">
-                    <div className="col-sm-12">
-                        <Link to="/" className="btn btn-sm btn-success btn-block">Powrót</Link>
-                    </div>
-                </div>
             </div>
         )
     }

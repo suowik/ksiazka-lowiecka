@@ -5,6 +5,11 @@ import Login from './auth/Login.js'
 import Logout from './auth/Logout.js'
 import Layout from './Layout.js'
 import HasRole from './common/HasRole.js'
+
+
+import HuntingBook from './HuntingBook.js'
+
+
 import auth from './auth/auth.js'
 
 function requireAuth(nextState, replace) {
@@ -21,7 +26,7 @@ class Routes extends Component {
         return (
             <Router history={hashHistory}>
                 <Route path="/" component={Layout} onEnter={requireAuth}>
-                    <Route path="/test" component={Test}/>
+                    <Route path="/" component={HuntingBook}/>
                 </Route>
                 <Route path="/login" component={Login}/>
                 <Route path="/logout" component={Logout}/>

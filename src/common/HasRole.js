@@ -21,31 +21,19 @@ class HasRole extends Component {
     componentWillMount() {
         auth.onChange = this.updateAuth;
         auth.login();
-        console.log("login attempt")
     }
 
     render() {
-        let toRender = null;
-        let authorized = this.hasRole();
-        if (authorized) {
-            toRender = this.props.children
+        if (!this.authorized()) {
+            return null;
         }
         return (
-            <div>{toRender}</div>
+            React.Children.only(this.props.children)
         )
     }
 
-    hasRole() {
-        let contains = this.state.roles.filter((role)=> {
-            let isInArray = false;
-            this.state.levelRequired.forEach((e)=> {
-                if(e === role){
-                    isInArray = true
-                }
-            });
-            return isInArray;
-        });
-        return contains.length !== 0
+    authorized() {
+        return this.state.roles.some(role => this.state.levelRequired.some(e => e === role));
     }
 }
 

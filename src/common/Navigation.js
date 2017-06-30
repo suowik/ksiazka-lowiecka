@@ -1,0 +1,37 @@
+import React, {Component} from 'react';
+import HasRole from './HasRole.js'
+
+class Navigation extends Component {
+
+    render() {
+        return (
+            <nav className="navbar navbar-default navbar-fixed-top">
+                <div className="container-fluid">
+                    <div className="navbar-header">
+                        <button type="button" className="navbar-toggle collapsed" data-toggle="collapse"
+                                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span className="sr-only">Menu</span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                        </button>
+                        <a className="navbar-brand" href="#">Książka łowiecka</a>
+                    </div>
+                    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul className="nav navbar-nav">
+                            <li className="active"><a href="#">Dziennik</a></li>
+                            <HasRole levelRequired="admin">
+                                <li><a href="#">Obszary łowieckie</a></li>
+                            </HasRole>
+                            <HasRole levelRequired="admin">
+                                <li><a href="#">Słowniki</a></li>
+                            </HasRole>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        )
+    }
+}
+
+export default Navigation
