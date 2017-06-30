@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import HasRole from './HasRole.js'
+import auth from '../auth/auth.js'
 
 class Navigation extends Component {
+
+
 
     render() {
         return (
@@ -19,13 +22,19 @@ class Navigation extends Component {
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav">
-                            <li className="active"><a href="#">Dziennik</a></li>
+                            <li className="active"><a href="#/book">Dziennik</a></li>
                             <HasRole levelRequired="admin">
-                                <li><a href="#">Obszary łowieckie</a></li>
+                                <li><a href="#/areas">Obszary łowieckie</a></li>
                             </HasRole>
                             <HasRole levelRequired="admin">
-                                <li><a href="#">Słowniki</a></li>
+                                <li><a href="#/dictionaries">Definicje zwierząt</a></li>
                             </HasRole>
+                            <HasRole levelRequired="admin">
+                                <li><a href="#/users">Użytkownicy</a></li>
+                            </HasRole>
+                        </ul>
+                        <ul className="nav navbar-nav navbar-right">
+                            {auth.loggedIn() && <li><a href="#/logout">Wyloguj</a></li>}
                         </ul>
                     </div>
                 </div>
