@@ -26,7 +26,7 @@ class Routes extends Component {
         return (
             <Router history={hashHistory}>
                 <Route path="/" component={Layout} onEnter={requireAuth}>
-                    <Route path="/" component={HuntingBook}/>
+                    <Route path="/book" component={HuntingBook}/>
                 </Route>
                 <Route path="/login" component={Login}/>
                 <Route path="/logout" component={Logout}/>
