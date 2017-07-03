@@ -71,7 +71,11 @@ class FinishHunting extends Component {
                 </Modal.Header>
                 <Modal.Body>
                     <form>
-
+                        <div className="form-group">
+                            <label htmlFor="endHour">Godzina zakończenia</label>
+                            <input type="time" className="form-control" id="endHour"
+                                   placeholder="hh:mm"/>
+                        </div>
                         <button type="submit" className="btn btn-default">Zakończ</button>
                     </form>
                 </Modal.Body>
@@ -226,7 +230,7 @@ class AddNewRecordModal extends Component {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="startHour">Godzina rozpoczęcia</label>
-                                <input type="date" className="form-control" id="startHour"
+                                <input type="time" className="form-control" id="startHour"
                                        placeholder="hh:mm"/>
                             </div>
                             <div className="form-group">
