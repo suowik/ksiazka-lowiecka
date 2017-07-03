@@ -1,18 +1,161 @@
 import React, {Component} from 'react';
-import {Button} from 'react-bootstrap';
-import {OverlayTrigger} from 'react-bootstrap';
-import {Popover} from 'react-bootstrap';
-import {Glyphicon} from 'react-bootstrap';
+import {Button, ButtonToolbar, OverlayTrigger, Popover, Modal} from 'react-bootstrap';
 
-const huntedAnimals = (
-    <Popover id="popover-positioned-bottom" title="Upolowane zwierzęta">
+
+function popover(animals) {
+    return <Popover id="hunted-animals" title="Upolowane zwierzęta">
         <ul>
-            <li>Dzik (2)</li>
-            <li>Lis (22)</li>
-            <li>Kaczka (92)</li>
+            {animals.map(animal => (
+                <li key={animal.name}>{animal.name} ({animal.shots})</li>
+            ))}
         </ul>
     </Popover>
-);
+}
+
+const huntings = [
+    {
+        id: 3,
+        state: "FINISHED",
+        huntedBy: {id: 1, name: "Jan", surname: "Kowalski"},
+        startDate: new Date().toDateString(),
+        startHour: "15:30",
+        endHour: "17:45",
+        animals: [{id: 90, name: "kaczka", shots: 3}, {name: "dzik", shots: 5}],
+        area: {id: 3, name: "Tarnów"}
+    },
+    {
+        id: 4,
+        state: "STARTED",
+        huntedBy: {id: 1, name: "Jan", surname: "Kowalski"},
+        startDate: new Date().toDateString(),
+        startHour: "18:00",
+        animals: [],
+        area: {id: 3, name: "Tarnów"}
+    },
+    {
+        id: 5,
+        state: "STARTED",
+        huntedBy: {id: 1, name: "Jan", surname: "Kowalski"},
+        startDate: new Date().toDateString(),
+        startHour: "19:30",
+        animals: [{id: 90, name: "kaczka", shots: 3}, {name: "dzik", shots: 5}],
+        area: {id: 3, name: "Tarnów"}
+    }
+];
+
+class FinishHunting extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showModal: false
+        };
+        this.open = this.open.bind(this);
+        this.close = this.close.bind(this);
+
+    }
+
+    close() {
+        this.setState({showModal: false});
+    }
+
+    open() {
+        this.setState({showModal: true});
+    }
+
+    render() {
+        return (<div>
+            <Button onClick={this.open} bsSize="xsmall" bsStyle="danger">Zakończ polowanie</Button>
+            <Modal show={this.state.showModal} onHide={this.close}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Zakończ polowanie</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form>
+
+                        <button type="submit" className="btn btn-default">Zakończ</button>
+                    </form>
+                </Modal.Body>
+            </Modal>
+        </div>)
+    }
+
+}
+
+class AddHuntedAnimals extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showModal: false
+        };
+        this.open = this.open.bind(this);
+        this.close = this.close.bind(this);
+    }
+
+    close() {
+        this.setState({showModal: false});
+    }
+
+    open() {
+        this.setState({showModal: true});
+    }
+
+    render() {
+        return (<div>
+            <Button onClick={this.open} bsSize="xsmall" bsStyle="info">Dodaj upolowane zwierzęta</Button>
+            <Modal show={this.state.showModal} onHide={this.close}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Dodaj upolowane zwierzęta</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="animal">Zwierzę</label>
+                            <select className="form-control" id="animal">
+                                <option value="dzik">Dzik</option>
+                                <option value="kaczka">Kaczka</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="shots">Oddane strzały</label>
+                            <input type="number" min="1" defaultValue="1" className="form-control" id="shots"/>
+                        </div>
+                        <Button bsSize="xsmall" type="submit">Zapisz</Button>
+                    </form>
+                </Modal.Body>
+
+            </Modal>
+        </div>)
+    }
+}
+
+class Hunting extends Component {
+    render() {
+        return (
+            <tr>
+                <td>{this.props.hunting.huntedBy.name} {this.props.hunting.huntedBy.surname}</td>
+                <td>{this.props.hunting.startDate}</td>
+                <td>{this.props.hunting.startHour}</td>
+                <td>{this.props.hunting.endHour}</td>
+                <td>
+                    {this.props.hunting.animals.length > 0 &&
+                    <OverlayTrigger trigger="click" placement="left"
+                                    overlay={popover(this.props.hunting.animals)}>
+                        <Button bsSize="xsmall">Podgląd</Button>
+                    </OverlayTrigger>
+                    }
+                </td>
+                <td>{this.props.hunting.area.name}</td>
+                <td>
+                    {this.props.hunting.state !== "FINISHED" &&
+                    <AddHuntedAnimals hunting={this.props.hunting}/>}
+                    <br />
+                    {this.props.hunting.state === "STARTED" &&
+                    <FinishHunting hunting={this.props.hunting}/>}
+                </td>
+            </tr>
+        )
+    }
+}
 
 
 class HuntingBook extends Component {
@@ -20,11 +163,11 @@ class HuntingBook extends Component {
     render() {
         return (
             <div className="table-responsive">
-                <table className="table table-bordered table-condensed">
+                <table className="table table-bordered table-condensed table-striped">
                     <thead>
                     <tr>
                         <th colSpan={7}>
-                            <Button>Wpisz się na polowanie</Button>
+                            <AddNewRecordModal />
                         </th>
                     </tr>
                     <tr>
@@ -34,32 +177,74 @@ class HuntingBook extends Component {
                         <th>Godzina zakończenia</th>
                         <th>Upolowane zwierzęta</th>
                         <th>Rewir</th>
-                        <th></th>
+                        <th>Akcje</th>
                     </tr>
-
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>Jan Kowalski</td>
-                        <td>26.06.2017</td>
-                        <td>14:10</td>
-                        <td>16:15</td>
-                        <td>
-                            <OverlayTrigger trigger="click" placement="left" overlay={huntedAnimals}>
-                                <Button>+</Button>
-                            </OverlayTrigger>
-                        </td>
-                        <td>Tarnów</td>
-                        <td>
-                            <Button>Edytuj</Button>
-                        </td>
-                    </tr>
+                    {huntings.map(hunting => <Hunting key={hunting.id} hunting={hunting}/>)}
                     </tbody>
                 </table>
             </div>
         )
     }
-
 }
+
+class AddNewRecordModal extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            showModal: false
+        };
+        this.open = this.open.bind(this);
+        this.close = this.close.bind(this);
+
+    }
+
+    close() {
+        this.setState({showModal: false});
+    }
+
+    open() {
+        this.setState({showModal: true});
+    }
+
+    render() {
+        return (
+            <div>
+                <Button onClick={this.open}>Rozpocznij polowanie</Button>
+                <Modal show={this.state.showModal} onHide={this.close}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Rozpocznij polowanie</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <form>
+                            <div className="form-group">
+                                <label htmlFor="startDate">Data rozpoczęcia</label>
+                                <input type="date" className="form-control" id="startDate"
+                                       placeholder="dd/mm/rrrr"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="startHour">Godzina rozpoczęcia</label>
+                                <input type="date" className="form-control" id="startHour"
+                                       placeholder="hh:mm"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="area">Rewir</label>
+                                <select className="form-control" id="area">
+                                    <option value="tarnow">Tarnów</option>
+                                    <option value="test">test</option>
+                                </select>
+                            </div>
+                            <button type="submit" className="btn btn-default">Rozpocznij</button>
+                        </form>
+                    </Modal.Body>
+
+                </Modal>
+            </div>
+        )
+    }
+}
+
 
 export default HuntingBook
