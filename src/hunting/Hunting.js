@@ -24,7 +24,7 @@ export default class Hunting extends Component {
                     <AddHuntedAnimals hunting={this.props.hunting}/>}
                     <br />
                     {this.props.hunting.status === "started" &&
-                    <FinishHunting hunting={this.props.hunting}/>}
+                    <FinishHunting hunting={this.props.hunting} postCreate={this.props.postCreate} />}
                 </td>
             </tr>
         )

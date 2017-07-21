@@ -76,7 +76,7 @@ class HuntingBook extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.huntings.map(hunting => <Hunting key={hunting._id} hunting={hunting}/>)}
+                    {this.state.huntings.map(hunting => <Hunting key={hunting._id} hunting={hunting} postCreate={this.refresh}/>)}
                     </tbody>
                 </table>
             </div>
