@@ -15,10 +15,15 @@ class HuntingBook extends Component {
         super(props);
         this.state = {
             huntings: []
-        }
+        };
+        this.refresh = this.refresh.bind(this);
     }
 
     componentDidMount() {
+        this.refresh();
+    }
+
+    refresh() {
         let token = auth.loggedUser().token;
         let requestData = {
             method: 'get',
@@ -27,7 +32,6 @@ class HuntingBook extends Component {
             url: API_URL + '/huntings'
         };
         let that = this;
-        console.log(requestData);
         request(requestData, (err, res, body) => {
             that.setState({
                 huntings: body
@@ -42,8 +46,8 @@ class HuntingBook extends Component {
                 <table className="table table-bordered table-condensed table-striped">
                     <thead>
                     <tr>
-                        <th colSpan={7}>
-                            <StartHunting />
+                        <th colSpan={6}>
+                            <StartHunting postCreate={this.refresh}/>
                         </th>
                     </tr>
                     <tr>
