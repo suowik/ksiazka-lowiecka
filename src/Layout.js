@@ -9,18 +9,6 @@ class Layout extends Component {
         this.state = {
             loggedIn: auth.loggedIn()
         };
-        this.updateAuth = this.updateAuth.bind(this);
-    }
-
-    updateAuth(loggedIn) {
-        this.setState({
-            loggedIn
-        })
-    }
-
-    componentWillMount() {
-        auth.onChange = this.updateAuth;
-        auth.login()
     }
 
     render() {

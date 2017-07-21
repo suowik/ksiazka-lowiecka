@@ -1,15 +1,28 @@
-module.exports = {
+import SHA256 from 'crypto-js/sha256'
+import globals from '../common/globals.js'
+let API_URL = globals['API_URL'];
+import request from 'request'
+
+
+class LoggedUser {
+    constructor(userId, roles, token) {
+        this.userId = userId;
+        this.roles = roles;
+        this.token = token
+    }
+}
+
+export default {
     login(email, pass, cb) {
         cb = arguments[arguments.length - 1];
-        if (localStorage.token) {
+        if (localStorage.loggedUser) {
             if (cb) cb(true);
             this.onChange(true);
             return
         }
-        pretendRequest(email, pass, (res) => {
+        login(email, pass, (res) => {
             if (res.authenticated) {
-                localStorage.token = res.token;
-                localStorage.roles = res.roles;
+                localStorage.loggedUser = JSON.stringify(new LoggedUser(res.userId, res.roles, res.token));
                 if (cb) cb(true);
                 this.onChange(true)
             } else {
@@ -19,37 +32,46 @@ module.exports = {
         })
     },
 
-    getToken() {
-        return localStorage.token
-    },
 
     logout(cb) {
-        delete localStorage.token;
+        delete localStorage.loggedUser;
         if (cb) cb();
         this.onChange(false)
     },
 
-    roles(){
-      return localStorage.roles || []
+    loggedUser(){
+        return JSON.parse(localStorage.loggedUser)
     },
 
     loggedIn() {
-        return !!localStorage.token
+        return !!localStorage.loggedUser
     },
 
-    onChange() {}
+    onChange() {
+    }
 };
 
-function pretendRequest(email, pass, cb) {
-    setTimeout(() => {
-        if (email === 'admin' && pass === 'admin') {
+function login(login, password, cb) {
+    let requestData = {
+        method: 'post',
+        json: true,
+        body: {
+            login: login,
+            password: SHA256(password).toString()
+        },
+        url: API_URL + '/login'
+    };
+    request(requestData, (err, res, body) => {
+        if (err) cb({authenticated: false});
+        if (res.statusCode === 200 && body.success === true) {
             cb({
                 authenticated: true,
-                roles: ['admin','user'],
-                token: Math.random().toString(36).substring(7)
+                roles: body.roles,
+                userId: body.userId,
+                token: body.token
             })
         } else {
-            cb({ authenticated: false })
+            cb({authenticated: false});
         }
-    }, 0)
+    });
 }

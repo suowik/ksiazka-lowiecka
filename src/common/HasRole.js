@@ -6,21 +6,9 @@ class HasRole extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            roles: auth.roles().split(","),
+            roles: auth.loggedUser().roles,
             levelRequired: props.levelRequired.split(",")
         };
-        this.updateAuth = this.updateAuth.bind(this);
-    }
-
-    updateAuth(loggedIn) {
-        this.setState({
-            loggedIn
-        })
-    }
-
-    componentWillMount() {
-        auth.onChange = this.updateAuth;
-        auth.login();
     }
 
     render() {

@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Button, ButtonToolbar, OverlayTrigger, Popover, Modal} from 'react-bootstrap';
+import React, {Component} from "react";
+import {Button, Modal, Popover} from "react-bootstrap";
 
 
 function popover(animals) {
@@ -164,6 +164,10 @@ class Hunting extends Component {
 
 
 class HuntingBook extends Component {
+
+    constructor(props){
+        super(props);
+    }
 
     render() {
         return (
