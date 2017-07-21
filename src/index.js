@@ -6,7 +6,7 @@ import Logout from './auth/Logout.js'
 import Layout from './Layout.js'
 import Register from './register/Register.js'
 
-import HuntingBook from './HuntingBook.js'
+import HuntingBook from './hunting/HuntingBook.js'
 
 import auth from './auth/auth.js';
 
