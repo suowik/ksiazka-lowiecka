@@ -60,14 +60,17 @@ export default class AddHuntedAnimals extends Component {
     addHuntedAnimals(e) {
         e.preventDefault();
         let that = this;
+        let found = this.state.animals.filter(a => a._id.toString() === this.state.animal.toString());
         let requestData = {
             _id: this.props.hunting._id,
             animal: {
                 _id: this.state.animal,
+                name: found[0].name,
                 shots: this.state.shots,
                 hunted: this.state.hunted
             }
         };
+        console.log(found)
         let options = {
             method: 'post',
             headers: {'x-access-token': auth.loggedUser().token},
