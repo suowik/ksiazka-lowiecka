@@ -14,7 +14,8 @@ class HuntingBook extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            huntings: []
+            huntings: [],
+            isInHunting: true
         };
         this.refresh = this.refresh.bind(this);
     }
@@ -24,17 +25,31 @@ class HuntingBook extends Component {
     }
 
     refresh() {
-        let token = auth.loggedUser().token;
+        let that = this;
+        let loggedUser = auth.loggedUser();
+        let token = loggedUser.token;
+        let userId = loggedUser.userId;
         let requestData = {
             method: 'get',
             headers: {'x-access-token': token},
             json: true,
             url: API_URL + '/huntings'
         };
-        let that = this;
         request(requestData, (err, res, body) => {
             that.setState({
                 huntings: body
+            });
+        });
+
+        let findStartedHuntings = {
+            method: 'get',
+            headers: {'x-access-token': token},
+            json: true,
+            url: API_URL + '/huntings/started/' + userId
+        };
+        request(findStartedHuntings, (err, res, body) => {
+            that.setState({
+                isInHunting: body.length !== 0
             });
         })
     }
@@ -45,11 +60,12 @@ class HuntingBook extends Component {
 
                 <table className="table table-bordered table-condensed table-striped">
                     <thead>
+                    {!this.state.isInHunting &&
                     <tr>
                         <th colSpan={6}>
                             <StartHunting postCreate={this.refresh}/>
                         </th>
-                    </tr>
+                    </tr>}
                     <tr>
                         <th>Myśliwy</th>
                         <th>Data i godzina rozpoczęcia</th>

@@ -9,7 +9,6 @@ export default class FinishHunting extends Component {
         };
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
-
     }
 
     close() {
