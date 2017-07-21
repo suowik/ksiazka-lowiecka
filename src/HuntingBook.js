@@ -142,10 +142,11 @@ class Hunting extends Component {
                 <td>{this.props.hunting.endHour}</td>
                 <td>
                     {this.props.hunting.animals.length > 0 &&
-                    <OverlayTrigger trigger="click" placement="left"
-                                    overlay={popover(this.props.hunting.animals)}>
-                        <Button bsSize="xsmall">Podgląd</Button>
-                    </OverlayTrigger>
+                    <ul>
+                        {this.props.hunting.animals.map(animal => (
+                            <li key={animal.name}>{animal.name} ({animal.shots})</li>
+                        ))}
+                    </ul>
                     }
                 </td>
                 <td>{this.props.hunting.area.name}</td>
