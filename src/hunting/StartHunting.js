@@ -78,8 +78,10 @@ export default class StartHunting extends Component {
             area: form.area,
             huntedAnimals: []
         };
+
         let postData = {
             method: 'post',
+            headers: {'x-access-token': auth.loggedUser().token},
             url: API_URL + '/huntings',
             body: hunting,
             json: true

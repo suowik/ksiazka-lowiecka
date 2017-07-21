@@ -6,7 +6,6 @@ import auth from '../auth/auth.js'
 export default class Hunting extends Component {
     constructor(props) {
         super(props);
-        console.log(props.hunting)
         this.state = {
             userId: auth.loggedUser().userId
         }
@@ -22,8 +21,7 @@ export default class Hunting extends Component {
                     {this.props.hunting.huntedAnimals.length > 0 &&
                     <ul>
                         {this.props.hunting.huntedAnimals.map(animal => (
-                            <li key={animal.name}><strong>{animal.name}</strong> oddane strzały: {animal.shots}
-                                sztuk: {animal.hunted}</li>
+                            <li key={animal.name}><strong>{animal.name}</strong> oddane strzały: {animal.shots} sztuk: {animal.hunted}</li>
                         ))}
                     </ul>
                     }
@@ -32,7 +30,7 @@ export default class Hunting extends Component {
                 <td>
                     {this.props.hunting.status !== "finished"
                     && this.props.hunting.user._id === this.state.userId
-                    && <AddHuntedAnimals hunting={this.props.hunting}/>}
+                    && <AddHuntedAnimals hunting={this.props.hunting} postHook={this.props.postCreate}/>}
                     <br />
                     {this.props.hunting.status === "started"
                     && this.props.hunting.user._id === this.state.userId
