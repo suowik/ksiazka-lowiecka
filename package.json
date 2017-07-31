@@ -20,7 +20,7 @@
     "shortid": "^2.2.8"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "webpack --config ./webpack.config.js --progress --colors && node server.js",
     "build": "webpack --config ./webpack.config.js --progress --colors",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
