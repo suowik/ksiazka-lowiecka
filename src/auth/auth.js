@@ -3,7 +3,6 @@ import globals from '../common/globals.js'
 let API_URL = globals['API_URL'];
 import request from 'request'
 
-
 class LoggedUser {
     constructor(userId, roles, token) {
         this.userId = userId;

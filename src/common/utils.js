@@ -16,6 +16,15 @@ function hoursUntil9AM(now) {
     return Math.ceil(nextDay.diff(now, 'minutes') / 60)
 }
 
+function centerOfGravity(path) {
+    let N = path.length;
+    return {
+        lat: (path.map(p => p.lat).reduce((a, b) => a + b)) / N,
+        lng: (path.map(p => p.lng).reduce((a, b) => a + b)) / N,
+    }
+}
+
 export default {
-    hoursUntil9AM: hoursUntil9AM
+    hoursUntil9AM: hoursUntil9AM,
+    centerOfGravity: centerOfGravity
 }
