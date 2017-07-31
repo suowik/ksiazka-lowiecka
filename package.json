@@ -20,7 +20,8 @@
     "shortid": "^2.2.8"
   },
   "scripts": {
-    "start": "./node_modules/.bin/webpack -d && node server.js",
+    "start": "webpack -d && node server.js",
+    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
