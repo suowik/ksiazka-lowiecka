@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress",
+    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
