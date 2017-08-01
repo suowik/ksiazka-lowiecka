@@ -32,7 +32,7 @@ export default class StartHunting extends Component {
             };
             request(requestData, (err, res, startedHuntings) => {
                 let filtered = areas.filter(a => {
-                    return startedHuntings.filter(h => h.area.name === a.name).length === 0;
+                    return !startedHuntings.find(h => h.area.name === a.name);
                 });
                 hunting.area = filtered[0]._id;
                 that.setState({

@@ -118,7 +118,6 @@ export default class HuntingAreas extends Component {
     activateArea(area) {
         return (e) => {
             e.preventDefault();
-            console.log(e.target.checked)
             this.withArea(area, (_area) => _area.active = e.target.checked);
         }
     }
