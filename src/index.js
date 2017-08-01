@@ -7,7 +7,7 @@ import Layout from './Layout.js'
 import Register from './register/Register.js'
 
 import HuntingBook from './hunting/HuntingBook.js'
-import GoogleApiWrapper from './huntingAreas/HuntingAreas.js'
+import HuntingAreas from './huntingAreas/HuntingAreas.js'
 
 import auth from './auth/auth.js';
 
@@ -30,7 +30,7 @@ class Routes extends Component {
                     <Route path="/book/me" component={HuntingBook} />
                 </Route>
                 <Route path="/areas" component={Layout}>
-                    <IndexRoute component={GoogleApiWrapper} />
+                    <IndexRoute component={HuntingAreas} />
                 </Route>
 
                 <Route path="/register" component={Register}/>
