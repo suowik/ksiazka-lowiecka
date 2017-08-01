@@ -3,6 +3,7 @@ import React, {Component} from "react";
 export default class Areas extends Component {
     render() {
         return (<table className="table table-striped">
+            <tbody>
             {this.props.areas.map(area =>
                 <tr key={area._id}>
                     <td onMouseOver={this.props.showInfo(area)}
@@ -13,6 +14,7 @@ export default class Areas extends Component {
                     </td>
                 </tr>
             )}
+            </tbody>
         </table>);
     }
 }
