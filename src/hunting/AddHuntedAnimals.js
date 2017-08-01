@@ -38,7 +38,7 @@ export default class AddHuntedAnimals extends Component {
         let that = this;
         request({
             method: 'get',
-            url: API_URL + '/animals',
+            url: API_URL + '/animals?active=true',
             headers: {'x-access-token': auth.loggedUser().token},
             json: true
         }, (err, res, body) => {

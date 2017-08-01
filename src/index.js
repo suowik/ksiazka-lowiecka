@@ -8,6 +8,7 @@ import Register from './register/Register.js'
 
 import HuntingBook from './hunting/HuntingBook.js'
 import HuntingAreas from './huntingAreas/HuntingAreas.js'
+import Animals from './animals/Animals.js'
 
 import auth from './auth/auth.js';
 
@@ -31,6 +32,10 @@ class Routes extends Component {
                 </Route>
                 <Route path="/areas" component={Layout}>
                     <IndexRoute component={HuntingAreas} />
+                </Route>
+
+                <Route path="/animals" component={Layout}>
+                    <IndexRoute component={Animals} />
                 </Route>
 
                 <Route path="/register" component={Register}/>

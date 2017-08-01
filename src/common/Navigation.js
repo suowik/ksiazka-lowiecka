@@ -35,7 +35,7 @@ class Navigation extends Component {
                                 <li><a href="#/areas">Obszary łowieckie</a></li>
                             </HasRole>
                             <HasRole levelRequired="admin">
-                                <li><a href="#/dictionaries">Definicje zwierząt</a></li>
+                                <li><a href="#/animals">Definicje zwierząt</a></li>
                             </HasRole>
                             <HasRole levelRequired="admin">
                                 <li><a href="#/users">Użytkownicy</a></li>
