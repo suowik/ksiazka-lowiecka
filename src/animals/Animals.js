@@ -64,7 +64,7 @@ export default class Animals extends Component {
                             <td>
                                 <div className="checkbox">
                                     <label>
-                                        <input type="checkbox" checked={animal.active}
+                                        <input type="checkbox" checked={animal.active} value={animal.active}
                                                onChange={this.activateAnimal(animal)}/> Widoczny?
                                     </label>
                                 </div>
