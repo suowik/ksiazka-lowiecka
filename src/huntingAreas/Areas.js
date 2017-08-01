@@ -12,6 +12,13 @@ export default class Areas extends Component {
                                type="text" value={area.name}
                                onChange={this.props.updateAreaName(area)}/>
                     </td>
+                    <td>
+                        <div className="checkbox">
+                            <label>
+                                <input type="checkbox" checked={area.active} onChange={this.props.activateArea(area)}/> Aktywna?
+                            </label>
+                        </div>
+                    </td>
                 </tr>
             )}
             </tbody>

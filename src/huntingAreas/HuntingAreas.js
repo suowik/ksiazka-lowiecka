@@ -29,6 +29,7 @@ export default class HuntingAreas extends Component {
         this.closeInfo = this.closeInfo.bind(this);
         this.withArea = this.withArea.bind(this);
         this.saveAreas = this.saveAreas.bind(this);
+        this.activateArea = this.activateArea.bind(this);
     }
 
     componentDidMount() {
@@ -51,7 +52,7 @@ export default class HuntingAreas extends Component {
     render() {
         return (
             <div className="row">
-                <div className="col-lg-2">
+                <div className="col-lg-4">
                     <h4>Obszary</h4>
                     <Areas areas={this.state.areas}
                            updateAreaName={(area) => {
@@ -60,12 +61,13 @@ export default class HuntingAreas extends Component {
                                }
                            }}
                            showInfo={this.showInfo}
-                           closeInfo={this.closeInfo}/>
+                           closeInfo={this.closeInfo}
+                           activateArea={this.activateArea}/>
                     <button className="btn btn-block btn-xs btn-primary"
                             onClick={this.saveAreas}>Zapisz obszary
                     </button>
                 </div>
-                <div className="col-lg-10">
+                <div className="col-lg-8">
                     <MapOfAreas
                         containerElement={
                             <div style={{height: `500px`}}/>
@@ -73,7 +75,7 @@ export default class HuntingAreas extends Component {
                         mapElement={
                             <div style={{height: `500px`}}/>
                         }
-                        areas={this.state.areas}
+                        areas={this.state.areas.filter(a => a.active)}
                         showInfo={this.showInfo}
                         closeInfo={this.closeInfo}
                         onAreaComplete={this.areaCreated}
@@ -91,7 +93,8 @@ export default class HuntingAreas extends Component {
             paths: paths,
             marker: {position: centerOfGravity(paths), showInfo: false},
             name: "Nowy obszar",
-            _id: shortid.generate()
+            _id: shortid.generate(),
+            active: true
         });
         this.setState({
             areas: areas
@@ -109,6 +112,14 @@ export default class HuntingAreas extends Component {
         return (e) => {
             e.preventDefault();
             this.withArea(area, (_area) => _area.marker.showInfo = false);
+        }
+    }
+
+    activateArea(area) {
+        return (e) => {
+            e.preventDefault();
+            console.log(e.target.checked)
+            this.withArea(area, (_area) => _area.active = e.target.checked);
         }
     }
 
