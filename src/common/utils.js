@@ -28,3 +28,4 @@ export default {
     hoursUntil9AM: hoursUntil9AM,
     centerOfGravity: centerOfGravity
 }
+

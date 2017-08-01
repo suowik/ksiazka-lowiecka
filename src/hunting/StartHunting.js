@@ -19,16 +19,28 @@ export default class StartHunting extends Component {
             method: 'get',
             headers: {'x-access-token': token},
             json: true,
-            url: API_URL + '/huntingAreas'
+            url: API_URL + '/huntingAreas?active=true'
         };
         let that = this;
-        request(requestData, (err, res, body) => {
+        request(requestData, (err, res, areas) => {
             let hunting = that.state.hunting;
-            hunting.area = body[0]._id;
-            that.setState({
-                huntingAreas: body,
-                hunting: hunting
-            })
+            let requestData = {
+                method: 'get',
+                headers: {'x-access-token': token},
+                json: true,
+                url: API_URL + '/huntings?status=started'
+            };
+            request(requestData, (err, res, startedHuntings) => {
+                let filtered = areas.filter(a => {
+                    return startedHuntings.filter(h => h.area.name === a.name).length === 0;
+                });
+                hunting.area = filtered[0]._id;
+                that.setState({
+                    huntingAreas: filtered,
+                    hunting: hunting
+                })
+            });
+
         });
     }
 
@@ -39,7 +51,7 @@ export default class StartHunting extends Component {
         this.state = {
             showModal: false,
             huntingAreas: [],
-            availableDurations: [...Array(hoursUntil).keys()],
+            availableDurations: [...new Array(hoursUntil).keys()],
             hunting: {
                 startDate: now.format('YYYY-MM-DD'),
                 startHour: now.format('HH:mm'),

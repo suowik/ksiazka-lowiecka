@@ -91,7 +91,6 @@ export default class Register extends Component {
                 city: this.state.formData.city
             }
         };
-        console.log(API_URL)
         let requestData = {
             method: 'post',
             url: API_URL + '/users',
