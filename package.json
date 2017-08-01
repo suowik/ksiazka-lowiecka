@@ -1,5 +1,5 @@
 {
-  "name": "dziennik-react",
+  "name": "ksiazka-lowiecka",
   "version": "0.1.0",
   "private": true,
   "main": "server.js",
@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "babel-cli": "^6.24.1",
+    "babel-loader": "^7.1.1",
     "babel-preset-es2015": "^6.24.1",
     "crypto-js": "^3.1.9-1",
     "express": "^4.15.3",
