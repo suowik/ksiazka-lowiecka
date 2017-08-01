@@ -1,7 +1,9 @@
 import {GoogleMap, withGoogleMap, Polygon, Marker, InfoWindow} from "react-google-maps";
+import React from "react";
 import DrawingManager from "react-google-maps/lib/drawing/DrawingManager";
 
-export default MapOfAreas = withGoogleMap(props => (
+
+const MapOfAreas = withGoogleMap(props => (
     <GoogleMap
         defaultZoom={12}
         defaultCenter={new google.maps.LatLng(49.9965585, 20.7221137)}>
@@ -51,3 +53,5 @@ export default MapOfAreas = withGoogleMap(props => (
 
     </GoogleMap>
 ));
+
+export default MapOfAreas
