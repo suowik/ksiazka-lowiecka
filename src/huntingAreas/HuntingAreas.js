@@ -1,21 +1,10 @@
 /* eslint-disable no-undef */
 import React, {Component} from "react";
-
-
 import shortid from 'shortid';
-
-import utils from '../common/utils.js'
-import auth from '../auth/auth.js'
-import globals from '../common/globals.js'
-import request from 'request'
-
 import MapOfAreas from './MapOfAreas.js';
 import Areas from './Areas.js';
-
-let API_URL = globals['API_URL'];
-
-let centerOfGravity = utils['centerOfGravity'];
-
+import {centerOfGravity} from '../common/utils.js';
+import {protectedGet,protectedPost} from '../common/requests.js';
 
 export default class HuntingAreas extends Component {
 
@@ -33,16 +22,8 @@ export default class HuntingAreas extends Component {
     }
 
     componentDidMount() {
-        let loggedUser = auth.loggedUser();
-        let token = loggedUser.token;
         let that = this;
-        let requestData = {
-            method: 'get',
-            headers: {'x-access-token': token},
-            json: true,
-            url: API_URL + '/huntingAreas'
-        };
-        request(requestData, (err, res, body) => {
+        protectedGet('/huntingAreas')((err, res, body) => {
             that.setState({
                 areas: body
             });
@@ -133,18 +114,8 @@ export default class HuntingAreas extends Component {
 
     saveAreas() {
         let areas = this.state.areas;
-        let loggedUser = auth.loggedUser();
-        let token = loggedUser.token;
         areas.forEach(area => {
-            let requestData = {
-                method: 'post',
-                headers: {'x-access-token': token},
-                json: true,
-                body: area,
-                url: API_URL + '/huntingAreas'
-            };
-            request(requestData, (err, res, body) => {
-            });
+            protectedPost('/huntingAreas',area)(()=>{});
         });
     }
 

@@ -1,12 +1,6 @@
 import React, {Component} from "react";
 import {Button, Modal} from "react-bootstrap";
-import request from 'request';
-
-import auth from '../auth/auth.js'
-import globals from '../common/globals.js'
-
-
-let API_URL = globals['API_URL'];
+import {protectedGet, protectedPost} from '../common/requests.js';
 
 
 export default class AddHuntedAnimals extends Component {
@@ -36,17 +30,12 @@ export default class AddHuntedAnimals extends Component {
 
     componentDidMount() {
         let that = this;
-        request({
-            method: 'get',
-            url: API_URL + '/animals?active=true',
-            headers: {'x-access-token': auth.loggedUser().token},
-            json: true
-        }, (err, res, body) => {
+        protectedGet('/animals?active=true')((err, res, body) => {
             that.setState({
                 animals: body,
                 animal: body[0]._id
             })
-        })
+        });
     }
 
     close() {
@@ -70,18 +59,10 @@ export default class AddHuntedAnimals extends Component {
                 hunted: this.state.hunted
             }
         };
-        console.log(found)
-        let options = {
-            method: 'post',
-            headers: {'x-access-token': auth.loggedUser().token},
-            url: API_URL + '/huntings/animals',
-            json: true,
-            body: requestData
-        };
-        request(options, (err, res, body) => {
+        protectedPost('/huntings/animals', requestData)(() => {
             that.props.postHook();
             that.close();
-        })
+        });
 
     }
 

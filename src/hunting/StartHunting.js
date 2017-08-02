@@ -1,36 +1,18 @@
 import React, {Component} from "react";
 import {Button, Modal} from "react-bootstrap";
-import request from 'request';
 import moment from 'moment'
 import auth from '../auth/auth.js';
-import globals from '../common/globals.js'
-import utils from '../common/utils.js'
+import {hoursUntil9AM} from '../common/utils.js'
 
-
-let API_URL = globals['API_URL'];
-let hoursUntil9AM = utils['hoursUntil9AM'];
-
+import {protectedGet, protectedPost} from '../common/requests.js'
 
 export default class StartHunting extends Component {
 
     componentDidMount() {
-        let token = auth.loggedUser().token;
-        let requestData = {
-            method: 'get',
-            headers: {'x-access-token': token},
-            json: true,
-            url: API_URL + '/huntingAreas?active=true'
-        };
         let that = this;
-        request(requestData, (err, res, areas) => {
+        protectedGet('/huntingAreas?active=true')((err, res, areas) => {
             let hunting = that.state.hunting;
-            let requestData = {
-                method: 'get',
-                headers: {'x-access-token': token},
-                json: true,
-                url: API_URL + '/huntings?status=started'
-            };
-            request(requestData, (err, res, startedHuntings) => {
+            protectedGet('/huntings?status=started')((err, res, startedHuntings) => {
                 let filtered = areas.filter(a => {
                     return !startedHuntings.find(h => h.area.name === a.name);
                 });
@@ -39,8 +21,7 @@ export default class StartHunting extends Component {
                     huntingAreas: filtered,
                     hunting: hunting
                 })
-            });
-
+            })
         });
     }
 
@@ -90,17 +71,8 @@ export default class StartHunting extends Component {
             area: form.area,
             huntedAnimals: []
         };
-
-        let postData = {
-            method: 'post',
-            headers: {'x-access-token': auth.loggedUser().token},
-            url: API_URL + '/huntings',
-            body: hunting,
-            json: true
-        };
-
         let that = this;
-        request(postData, (err, res, body) => {
+        protectedPost('/huntings', hunting)((err, res) => {
             if (res.statusCode === 409) {
                 alert("Polowanie już zostało ropoczęte");
                 that.close();

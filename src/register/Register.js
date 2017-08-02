@@ -1,10 +1,7 @@
 import React, {Component} from "react";
-import request from 'request';
 import SHA256 from 'crypto-js/sha256'
 import { hashHistory } from 'react-router'
-
-import globals from '../common/globals.js'
-let API_URL = globals['API_URL'];
+import {protectedPost} from '../common/requests.js'
 
 class FormGroup extends Component {
     constructor(props) {
@@ -91,13 +88,7 @@ export default class Register extends Component {
                 city: this.state.formData.city
             }
         };
-        let requestData = {
-            method: 'post',
-            url: API_URL + '/users',
-            json: true,
-            body: registrationData
-        };
-        request(requestData, (err, res, body) => {
+        protectedPost('/users',registrationData)((err, res, body) => {
             if (res.statusCode !== 200) {
                 this.setState({
                     isValid: false,
@@ -106,7 +97,7 @@ export default class Register extends Component {
             } else {
                 hashHistory.push('/login')
             }
-        })
+        });
     }
 
     render() {

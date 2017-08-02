@@ -1,13 +1,10 @@
 import React, {Component} from "react";
-import request from 'request';
 
 import Hunting from "./Hunting.js";
 import StartHunting from "./StartHunting.js";
 import auth from '../auth/auth.js'
-import globals from '../common/globals.js'
 
-
-let API_URL = globals['API_URL'];
+import {protectedGet} from '../common/requests.js'
 
 class HuntingBook extends Component {
 
@@ -27,31 +24,18 @@ class HuntingBook extends Component {
     refresh() {
         let that = this;
         let loggedUser = auth.loggedUser();
-        let token = loggedUser.token;
         let userId = loggedUser.userId;
-        let requestData = {
-            method: 'get',
-            headers: {'x-access-token': token},
-            json: true,
-            url: API_URL + '/huntings'
-        };
-        request(requestData, (err, res, body) => {
+
+        protectedGet('huntings')((err, res, body) => {
             that.setState({
                 huntings: body
             });
         });
-
-        let findStartedHuntings = {
-            method: 'get',
-            headers: {'x-access-token': token},
-            json: true,
-            url: API_URL + '/huntings/started/' + userId
-        };
-        request(findStartedHuntings, (err, res, body) => {
+        protectedGet('/huntings/started/' + userId)((err, res, body) => {
             that.setState({
                 isInHunting: body.length !== 0
             });
-        })
+        });
     }
 
     render() {
@@ -76,7 +60,8 @@ class HuntingBook extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.huntings.map(hunting => <Hunting key={hunting._id} hunting={hunting} postCreate={this.refresh}/>)}
+                    {this.state.huntings.map(hunting => <Hunting key={hunting._id} hunting={hunting}
+                                                                 postCreate={this.refresh}/>)}
                     </tbody>
                 </table>
             </div>

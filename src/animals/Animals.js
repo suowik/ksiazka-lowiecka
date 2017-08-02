@@ -1,13 +1,7 @@
 /* eslint-disable no-undef */
 import React, {Component} from "react";
 import shortid from 'shortid';
-import auth from '../auth/auth.js'
-import globals from '../common/globals.js'
-import request from 'request'
-
-
-let API_URL = globals['API_URL'];
-
+import {protectedGet, protectedPost} from '../common/requests.js'
 
 export default class Animals extends Component {
 
@@ -24,20 +18,12 @@ export default class Animals extends Component {
     }
 
     componentDidMount() {
-        let loggedUser = auth.loggedUser();
-        let token = loggedUser.token;
         let that = this;
-        let requestData = {
-            method: 'get',
-            headers: {'x-access-token': token},
-            json: true,
-            url: API_URL + '/animals'
-        };
-        request(requestData, (err, res, body) => {
+        protectedGet('/animals')((err, res, body) => {
             that.setState({
                 animals: body
             });
-        });
+        })
     }
 
     render() {
@@ -110,17 +96,8 @@ export default class Animals extends Component {
 
     saveAnimals() {
         let animals = this.state.animals;
-        let loggedUser = auth.loggedUser();
-        let token = loggedUser.token;
         animals.forEach(animal => {
-            let requestData = {
-                method: 'post',
-                headers: {'x-access-token': token},
-                json: true,
-                body: animal,
-                url: API_URL + '/animals'
-            };
-            request(requestData, (err, res, body) => {
+            protectedPost('/animals', animal)(() => {
             });
         });
     }

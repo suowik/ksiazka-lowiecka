@@ -1,13 +1,8 @@
 import React, {Component} from "react";
 import {Button, Modal} from "react-bootstrap";
-import request from 'request';
 import moment from 'moment';
 
-import auth from '../auth/auth.js'
-import globals from '../common/globals.js'
-
-
-let API_URL = globals['API_URL'];
+import {protectedPost} from '../common/requests.js'
 
 export default class FinishHunting extends Component {
     constructor(props) {
@@ -38,17 +33,10 @@ export default class FinishHunting extends Component {
             _id: this.props.hunting._id
         };
         let that = this;
-        request({
-            method: 'post',
-            headers: {'x-access-token': auth.loggedUser().token},
-            json: true,
-            body: requestData,
-            url: API_URL + '/huntings/finish'
-        }, (err, res, body) => {
+        protectedPost('/huntings/finish', requestData)(() => {
             that.close();
             that.props.postCreate();
         })
-
     }
 
     render() {

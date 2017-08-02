@@ -1,5 +1,5 @@
 import moment from 'moment'
-function hoursUntil9AM(now) {
+export function hoursUntil9AM(now) {
     let nextDay = moment(now);
     if (now.hours() > 9) {
         nextDay = nextDay
@@ -16,7 +16,7 @@ function hoursUntil9AM(now) {
     return Math.ceil(nextDay.diff(now, 'minutes') / 60)
 }
 
-function centerOfGravity(path) {
+export function centerOfGravity(path) {
     let N = path.length;
     return {
         lat: (path.map(p => p.lat).reduce((a, b) => a + b)) / N,
