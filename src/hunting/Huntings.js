@@ -13,17 +13,17 @@ export default class Huntings extends Component {
             <TableHeaderColumn isKey
                                dataField='_id'
                                hidden/>
-            <TableHeaderColumn dataField='user'
-                               dataSort={true}
-                               sortFunc={(a, b, order) => {
-                                   if (order === 'desc') {
-                                       return a.user.surname.localeCompare(b.user.surname);
-                                   } else {
-                                       return b.user.surname.localeCompare(a.user.surname);
-                                   }
-                               }}
-                               dataFormat={(user, row) =>
-                                   <div>{user.name} {user.surname}</div>}>Myśliwy</TableHeaderColumn>
+            {this.props.showHunter && <TableHeaderColumn dataField='user'
+                                                         dataSort={true}
+                                                         sortFunc={(a, b, order) => {
+                                                             if (order === 'desc') {
+                                                                 return a.user.surname.localeCompare(b.user.surname);
+                                                             } else {
+                                                                 return b.user.surname.localeCompare(a.user.surname);
+                                                             }
+                                                         }}
+                                                         dataFormat={(user, row) =>
+                                                             <div>{user.name} {user.surname}</div>}>Myśliwy</TableHeaderColumn>}
             <TableHeaderColumn dataField='start' dataSort={true}>Rozpoczęte</TableHeaderColumn>
             <TableHeaderColumn dataField='end' dataSort={true}>Zakończone</TableHeaderColumn>
             <TableHeaderColumn dataField='huntedAnimals' width={'25%'} dataFormat={(animals, hunting) =>
@@ -51,7 +51,8 @@ export default class Huntings extends Component {
                                                                 <div>{row.status !== "finished"
                                                                 && row.user._id === this.props.userId
                                                                 &&
-                                                                <AddHuntedAnimals hunting={row} postHook={this.props.postHook}/>}
+                                                                <AddHuntedAnimals hunting={row}
+                                                                                  postHook={this.props.postHook}/>}
                                                                     <br />
                                                                     {row.status === "started"
                                                                     && row.user._id === this.props.userId

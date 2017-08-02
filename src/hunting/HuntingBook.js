@@ -49,7 +49,7 @@ export default class HuntingBook extends Component {
             </div>
             <div className="row">
                 <div className="col-lg-12">
-                    <Huntings huntings={this.state.huntings} userId={this.state.userId} renderActions={true} postHook={this.refresh}/>
+                    <Huntings huntings={this.state.huntings} showHunter={true} userId={this.state.userId} renderActions={true} postHook={this.refresh}/>
                 </div>
             </div>
         </div>)

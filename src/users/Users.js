@@ -1,26 +1,21 @@
 import React, {Component} from 'react';
 import {protectedGet} from '../common/requests.js'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
-
-class UserActions extends Component {
-    render() {
-        return (
-            <div>
-                <button className="btn btn-default btn-xs">Podgląd</button>
-                &nbsp;
-                <button className="btn btn-default btn-xs">Polowania</button>
-            </div>
-        )
-    }
-}
+import User from './User.js'
+import UserHuntings from './UserHuntings.js'
 
 export default class Users extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            users: []
+            users: [],
+            user: {name: "", surname: ""},
+            editMode: false,
+            showHuntings: false,
+            huntings: []
         };
+        this.loadHuntingsOfUser = this.loadHuntingsOfUser.bind(this);
     }
 
     componentDidMount() {
@@ -32,10 +27,40 @@ export default class Users extends Component {
         })
     }
 
+    loadHuntingsOfUser(user) {
+        let that = this;
+        return (e) => {
+            e.preventDefault();
+            protectedGet('huntings?userId=' + user._id)((err, res, body) => {
+                that.setState({
+                    user: user,
+                    huntings: body,
+                    showHuntings: true
+                })
+            })
+        }
+    }
+
     render() {
         return (
             <div className="row">
                 <div className="col-lg-12">
+                    <User visible={this.state.editMode} data={this.state.user} close={() => {
+                        this.setState({
+                            editMode: false,
+                            user: {name: "", surname: ""}
+                        })
+                    }}/>
+                    <UserHuntings user={this.state.user}
+                                  huntings={this.state.huntings}
+                                  close={() => {
+                                      this.setState({
+                                          showHuntings: false,
+                                          user: {name: "", surname: ""},
+                                          huntings: []
+                                      })
+                                  }}
+                                  visible={this.state.showHuntings}/>
                     <BootstrapTable
                         data={this.state.users}
                         striped
@@ -63,7 +88,21 @@ export default class Users extends Component {
                                            } }
                                            dataSort={ true }>Nazwisko</TableHeaderColumn>
                         <TableHeaderColumn dataField='_id'
-                                           dataFormat={(_id, user) => <UserActions _id={_id} user={user}/>}>
+                                           dataFormat={(_id, user) =>
+                                               <div>
+                                                   <button className="btn btn-default btn-xs" onClick={() => {
+                                                       this.setState({
+                                                           user: user,
+                                                           editMode: true
+                                                       })
+                                                   }}>Podgląd
+                                                   </button>
+                                                   &nbsp;
+                                                   <button className="btn btn-default btn-xs"
+                                                           onClick={this.loadHuntingsOfUser(user)}>Polowania
+                                                   </button>
+                                               </div>
+                                           }>
                             Akcje
                         </TableHeaderColumn>
                     </BootstrapTable>
