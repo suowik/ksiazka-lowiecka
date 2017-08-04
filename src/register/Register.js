@@ -1,32 +1,9 @@
 import React, {Component} from "react";
 import SHA256 from 'crypto-js/sha256'
-import { hashHistory } from 'react-router'
+import {hashHistory} from 'react-router'
 import {protectedPost} from '../common/requests.js'
+import FormGroup from '../common/FormGroup.js'
 
-class FormGroup extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            fieldValue: ""
-        }
-    }
-
-    render() {
-        return (
-            <div className="form-group">
-                <label htmlFor={this.props.labelFor}>{this.props.label}</label>
-                <input className="form-control"
-                       type={this.props.type}
-                       id={this.props.labelFor}
-                       placeholder={this.props.label}
-                       required="required"
-                       name={this.props.name}
-                       value={this.fieldValue}
-                       onChange={this.props.handleInputChange}/>
-            </div>
-        )
-    }
-}
 
 export default class Register extends Component {
     constructor(props) {
@@ -88,7 +65,7 @@ export default class Register extends Component {
                 city: this.state.formData.city
             }
         };
-        protectedPost('/users',registrationData)((err, res, body) => {
+        protectedPost('/users', registrationData)((err, res, body) => {
             if (res.statusCode !== 200) {
                 this.setState({
                     isValid: false,

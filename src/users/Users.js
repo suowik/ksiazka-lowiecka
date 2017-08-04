@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-import {protectedGet} from '../common/requests.js'
+import {protectedGet, protectedPost} from '../common/requests.js'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import User from './User.js'
 import UserHuntings from './UserHuntings.js'
+import _ from 'lodash'
+
+const defaultUser = {name: "", surname: "", address: {}};
 
 export default class Users extends Component {
 
@@ -10,12 +13,14 @@ export default class Users extends Component {
         super(props);
         this.state = {
             users: [],
-            user: {name: "", surname: ""},
+            user: defaultUser,
             editMode: false,
             showHuntings: false,
             huntings: []
         };
         this.loadHuntingsOfUser = this.loadHuntingsOfUser.bind(this);
+        this.handleUserChange = this.handleUserChange.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
     }
 
     componentDidMount() {
@@ -27,13 +32,33 @@ export default class Users extends Component {
         })
     }
 
+    handleUserChange(field, value) {
+        let user = this.state.user;
+        _.set(user, field, value);
+        this.setState({
+            user: user
+        });
+    }
+
+    handleUpdate(e) {
+        e.preventDefault();
+        let user = this.state.user;
+        let that = this;
+        protectedPost('users', user)(() => {
+            that.setState({
+                editMode: false,
+                user: defaultUser
+            })
+        });
+    }
+
     loadHuntingsOfUser(user) {
         let that = this;
         return (e) => {
             e.preventDefault();
             protectedGet('huntings?userId=' + user._id)((err, res, body) => {
                 that.setState({
-                    user: user,
+                    user: defaultUser,
                     huntings: body,
                     showHuntings: true
                 })
@@ -45,18 +70,22 @@ export default class Users extends Component {
         return (
             <div className="row">
                 <div className="col-lg-12">
-                    <User visible={this.state.editMode} data={this.state.user} close={() => {
-                        this.setState({
-                            editMode: false,
-                            user: {name: "", surname: ""}
-                        })
-                    }}/>
+                    <User visible={this.state.editMode}
+                          data={this.state.user}
+                          handleInputChange={this.handleUserChange}
+                          handleUpdate={this.handleUpdate}
+                          close={() => {
+                              this.setState({
+                                  editMode: false,
+                                  user: defaultUser
+                              })
+                          }}/>
                     <UserHuntings user={this.state.user}
                                   huntings={this.state.huntings}
                                   close={() => {
                                       this.setState({
                                           showHuntings: false,
-                                          user: {name: "", surname: ""},
+                                          user: defaultUser,
                                           huntings: []
                                       })
                                   }}
