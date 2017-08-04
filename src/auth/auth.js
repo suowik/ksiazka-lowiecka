@@ -2,26 +2,41 @@ import SHA256 from 'crypto-js/sha256'
 import globals from '../common/globals.js'
 let API_URL = globals['API_URL'];
 import request from 'request'
+import moment from 'moment'
 
 class LoggedUser {
-    constructor(userId, roles, token) {
+    constructor(userId, roles, token, lastLogin) {
         this.userId = userId;
         this.roles = roles;
-        this.token = token
+        this.token = token;
+        this.lastLogin = lastLogin;
     }
+
+    needsLogin() {
+        let diff = moment().diff(this.lastLogin, 'minutes');
+        return diff > 45
+    }
+
+}
+
+function getUser() {
+    let loggedUser = localStorage.loggedUser;
+    let {userId, roles, token, lastLogin} = JSON.parse(loggedUser);
+    return new LoggedUser(userId, roles, token, moment(lastLogin, 'YYYY-MM-DD HH:mm'))
 }
 
 export default {
     login(email, pass, cb) {
         cb = arguments[arguments.length - 1];
-        if (localStorage.loggedUser) {
+        if (localStorage.loggedUser
+            && !getUser().needsLogin()) {
             if (cb) cb(true);
             this.onChange(true);
             return
         }
         login(email, pass, (res) => {
             if (res.authenticated) {
-                localStorage.loggedUser = JSON.stringify(new LoggedUser(res.userId, res.roles, res.token));
+                localStorage.loggedUser = JSON.stringify(new LoggedUser(res.userId, res.roles, res.token, moment().format('YYYY-MM-DD HH:mm')));
                 if (cb) cb(true);
                 this.onChange(true)
             } else {
@@ -30,7 +45,6 @@ export default {
             }
         })
     },
-
 
     logout(cb) {
         delete localStorage.loggedUser;
@@ -43,7 +57,7 @@ export default {
     },
 
     loggedIn() {
-        return !!localStorage.loggedUser
+        return !!localStorage.loggedUser && !getUser().needsLogin()
     },
 
     onChange() {
