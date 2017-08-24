@@ -29,6 +29,7 @@ class Navigation extends Component {
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav">
+                            <li><a href="#/hunting">Rozpocznij polowanie</a></li>
                             <li><a href="#/book">Dziennik</a></li>
                             <li><a href="#/book/me">Moje polowania</a></li>
                             <HasRole levelRequired="admin">

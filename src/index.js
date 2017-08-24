@@ -13,6 +13,8 @@ import Users from './users/Users.js'
 
 import auth from './auth/auth.js';
 
+import NewHuntingFlow from './hunting/flow/NewHuntingFlow.js';
+
 function requireAuth(nextState, replace) {
     if (!auth.loggedIn()) {
         replace({
@@ -30,6 +32,9 @@ class Routes extends Component {
                     <IndexRoute component={HuntingBook} />
                     <Route path="/book" component={HuntingBook} />
                     <Route path="/book/me" component={HuntingBook} />
+                </Route>
+                <Route path="/hunting" component={Layout}>
+                    <IndexRoute component={NewHuntingFlow} />
                 </Route>
                 <Route path="/areas" component={Layout}>
                     <IndexRoute component={HuntingAreas} />

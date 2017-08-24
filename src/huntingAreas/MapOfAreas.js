@@ -1,6 +1,6 @@
-import {GoogleMap, withGoogleMap, Polygon, Marker, InfoWindow} from "react-google-maps";
 import React from "react";
 import DrawingManager from "react-google-maps/lib/drawing/DrawingManager";
+import {GoogleMap, withGoogleMap, Polygon, Marker, InfoWindow} from "react-google-maps";
 
 
 const MapOfAreas = withGoogleMap(props => (
