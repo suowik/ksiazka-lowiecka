@@ -39,8 +39,7 @@ export default class SelectHuntingArea extends Component {
                 let latDiff = (hs.lat * 1000) - (selectedHuntingSpot.lat * 1000);
                 let lngDiff = (hs.lng * 1000) - (selectedHuntingSpot.lng * 1000);
                 let dx = latDiff * latDiff + lngDiff * lngDiff;
-                let d = Math.sqrt(dx);
-                return d
+                return Math.sqrt(dx);
             })
             .filter(d => d < 2.7);
         return collisionSpots.length === 0 && huntingSpot.lat > 0 && huntingSpot.lng > 0;
