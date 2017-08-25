@@ -1,7 +1,7 @@
 import moment from 'moment'
 export function hoursUntil9AM(now) {
     let nextDay = moment(now);
-    if (now.hours() > 9) {
+    if (now.hours() >= 9) {
         nextDay = nextDay
             .days(nextDay.days() + 1)
             .hours(9)

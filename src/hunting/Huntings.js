@@ -35,17 +35,6 @@ export default class Huntings extends Component {
                     ))}
                 </ul>
             }>Upolowane zwierzęta</TableHeaderColumn>
-            <TableHeaderColumn dataField='area'
-                               dataSort={true}
-                               width={'10%'}
-                               dataFormat={(area, row) => area.name}
-                               sortFunc={(a, b, order) => {
-                                   if (order === 'desc') {
-                                       return a.area.name.localeCompare(b.area.name);
-                                   } else {
-                                       return b.area.name.localeCompare(a.area.name);
-                                   }
-                               }}>Rewir</TableHeaderColumn>
             {this.props.renderActions && <TableHeaderColumn dataField='hunting'
                                                             dataFormat={(hunting, row) =>
                                                                 <div>{row.status !== "finished"
