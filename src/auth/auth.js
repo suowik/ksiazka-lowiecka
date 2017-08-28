@@ -76,7 +76,7 @@ function login(login, password, cb) {
     };
     request(requestData, (err, res, body) => {
         if (err) cb({authenticated: false});
-        if (res.statusCode === 200 && body.success === true) {
+        if (res.statusCode === 200 && body.success === true && body.active === true) {
             cb({
                 authenticated: true,
                 roles: body.roles,
