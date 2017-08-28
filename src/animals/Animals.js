@@ -1,7 +1,50 @@
-/* eslint-disable no-undef */
 import React, {Component} from "react";
-import shortid from 'shortid';
-import {protectedGet, protectedPost} from '../common/requests.js'
+import shortid from "shortid";
+import {protectedGet, protectedPost} from "../common/requests.js";
+import _ from "lodash";
+
+class MonthSelect extends Component {
+    render() {
+        return (
+            <div className="form-group">
+                <label htmlFor={this.props.name}>{this.props.label}</label>
+                <select className="form-control"
+                        name={this.props.name}
+                        value={this.props.value}
+                        onChange={this.props.handleChange(this.props.animal)}>
+                    <option value={0}>styczeń</option>
+                    <option value={1}>luty</option>
+                    <option value={2}>marzec</option>
+                    <option value={3}>kwiecień</option>
+                    <option value={4}>maj</option>
+                    <option value={5}>czerwiec</option>
+                    <option value={6}>lipiec</option>
+                    <option value={7}>sierpień</option>
+                    <option value={8}>wrzesień</option>
+                    <option value={9}>październik</option>
+                    <option value={10}>listopad</option>
+                    <option value={11}>grudzień</option>
+                </select>
+            </div>
+        )
+    }
+}
+
+class DaySelect extends Component {
+    render() {
+        return (
+            <div className="form-group">
+                <label htmlFor={this.props.name}>{this.props.label}</label>
+                <select className="form-control"
+                        name={this.props.name}
+                        value={this.props.value}
+                        onChange={this.props.handleChange(this.props.animal)}>
+                    {[...new Array(31).keys()].map(day => <option key={day} value={day}>{day}</option>)}
+                </select>
+            </div>
+        )
+    }
+}
 
 export default class Animals extends Component {
 
@@ -10,11 +53,6 @@ export default class Animals extends Component {
         this.state = {
             animals: []
         };
-        this.withAnimal = this.withAnimal.bind(this);
-        this.saveAnimals = this.saveAnimals.bind(this);
-        this.changeAnimalName = this.changeAnimalName.bind(this);
-        this.activateAnimal = this.activateAnimal.bind(this);
-        this.addAnimal = this.addAnimal.bind(this);
     }
 
     componentDidMount() {
@@ -45,15 +83,42 @@ export default class Animals extends Component {
                         </thead>
                         <tbody>
                         {this.state.animals.map(animal => <tr key={animal._id}>
-                            <td><input type="text" value={animal.name} className="form-control"
-                                       onChange={this.changeAnimalName(animal)}/></td>
                             <td>
-                                <div className="checkbox">
-                                    <label>
-                                        <input type="checkbox" checked={animal.active} value={animal.active}
-                                               onChange={this.activateAnimal(animal)}/> Widoczny?
-                                    </label>
+                                <div><label htmlFor="name">Nazwa:</label>
+                                    <input type="text"
+                                           value={animal.name}
+                                           name="name"
+                                           className="form-control"
+                                           onChange={this.handleChange(animal)}/>
                                 </div>
+                            </td>
+                            <td>
+                                <MonthSelect name="protection.from.month"
+                                             label="Okres ochronny od (miesiąc):"
+                                             animal={animal}
+                                             value={animal.protection.from.month}
+                                             handleChange={this.handleChange}/>
+                            </td>
+                            <td>
+                                <DaySelect name="protection.from.day"
+                                           label="Okres ochronny od (dzień):"
+                                           animal={animal}
+                                           value={animal.protection.from.day}
+                                           handleChange={this.handleChange}/>
+                            </td>
+                            <td>
+                                <MonthSelect name="protection.to.month"
+                                             label="Okres ochronny do (miesiąc):"
+                                             animal={animal}
+                                             value={animal.protection.to.month}
+                                             handleChange={this.handleChange}/>
+                            </td>
+                            <td>
+                                <DaySelect name="protection.to.day"
+                                           label="Okres ochronny do (dzień):"
+                                           animal={animal}
+                                           value={animal.protection.to.day}
+                                           handleChange={this.handleChange}/>
                             </td>
                         </tr>)}
                         </tbody>
@@ -63,38 +128,37 @@ export default class Animals extends Component {
         );
     }
 
-    addAnimal() {
+    handleChange = (animal) => {
+        return (e) => {
+            e.preventDefault();
+            const name = e.target.name;
+            const value = e.target.value;
+            this.withAnimal(animal, (_animal) => _.set(_animal, name, value))
+        }
+    };
+
+    addAnimal = () => {
         let animals = this.state.animals;
-        animals.push({_id: shortid.generate(), name: "", active: false});
+        animals.push({
+            _id: shortid.generate(),
+            name: "",
+            protection: {from: {day: 1, month: 1}, to: {day: 1, month: 1}}
+        });
         this.setState({
             animals: animals
         })
-    }
+    };
 
-    changeAnimalName(animal) {
-        return (e) => {
-            e.preventDefault();
-            this.withAnimal(animal, (_animal) => _animal.name = e.target.value);
-        }
-    }
-
-    activateAnimal(animal) {
-        return (e) => {
-            e.preventDefault();
-            this.withAnimal(animal, (_animal) => _animal.active = e.target.checked);
-        }
-    }
-
-    withAnimal(animal, cb) {
+    withAnimal = (animal, cb) => {
         let animals = this.state.animals;
         let _animal = animals.find(a => a._id === animal._id);
         if (_animal) {
             cb(_animal);
             this.setState({animals: animals})
         }
-    }
+    };
 
-    saveAnimals() {
+    saveAnimals = () => {
         let animals = this.state.animals;
         animals.forEach(animal => {
             protectedPost('/animals', animal)(() => {
