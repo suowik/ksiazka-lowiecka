@@ -3,15 +3,15 @@ import {Modal} from "react-bootstrap";
 
 class FormGroup extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state ={
+        this.state = {
             value: props.value
         };
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange(e){
+    handleChange(e) {
         e.preventDefault();
         const target = e.target;
         const value = target.value;
@@ -42,6 +42,17 @@ class FormGroup extends Component {
 
 
 export default class User extends Component {
+
+    handleChange = (e) => {
+        e.preventDefault();
+        const target = e.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+        this.setState({
+            value: value
+        });
+        this.props.handleInputChange(name, value)
+    }
 
     render() {
         return (
@@ -87,6 +98,16 @@ export default class User extends Component {
                                    name="address.city"
                                    value={this.props.data.address.city}
                                    handleInputChange={this.props.handleInputChange}/>
+                        <div className="form-group">
+                            <label htmlFor="active">Aktywowany</label>
+                            <input className="form-control"
+                                   type="checkbox"
+                                   id="active"
+                                   name="active"
+                                   checked={this.props.data.active}
+                                   onChange={this.handleChange}
+                            />
+                        </div>
                         <button type="submit" className="btn btn-primary">Zapisz</button>
                     </form>
                 </Modal.Body>

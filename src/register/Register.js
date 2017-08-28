@@ -59,6 +59,7 @@ export default class Register extends Component {
             password: SHA256(this.state.formData.password).toString(),
             name: this.state.formData.name,
             surname: this.state.formData.surname,
+            active: false,
             address: {
                 phone: this.state.formData.phone,
                 street: this.state.formData.street,
