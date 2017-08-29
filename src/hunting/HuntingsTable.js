@@ -9,6 +9,12 @@ export default class HuntingsTable extends Component {
         return (<BootstrapTable
             data={this.props.huntings}
             striped
+            options={
+                {
+                    defaultSortName: 'start',
+                    defaultSortOrder: 'desc'
+                }
+            }
             pagination>
             <TableHeaderColumn isKey
                                dataField='_id'
@@ -37,14 +43,12 @@ export default class HuntingsTable extends Component {
             }>Upolowane zwierzęta</TableHeaderColumn>
             {this.props.renderActions && <TableHeaderColumn dataField='hunting'
                                                             dataFormat={(hunting, row) =>
-                                                                <div>{row.status !== "finished"
-                                                                && row.user._id === this.props.userId
-                                                                &&
-                                                                <AddHuntedAnimals hunting={row}
-                                                                                  postHook={this.props.postHook}/>}
+                                                                <div>
+                                                                    {row.status !== "finished" && row.user._id === this.props.userId
+                                                                    && <AddHuntedAnimals hunting={row}
+                                                                                         postHook={this.props.postHook}/>}
                                                                     <br />
-                                                                    {row.status === "started"
-                                                                    && row.user._id === this.props.userId
+                                                                    {row.status === "started" && row.user._id === this.props.userId
                                                                     && <FinishHunting hunting={row}
                                                                                       postCreate={this.props.postHook}/>}
                                                                 </div>}>Akcje</TableHeaderColumn>}
