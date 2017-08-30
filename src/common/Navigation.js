@@ -2,26 +2,8 @@ import React, {Component} from 'react';
 import HasRole from './HasRole.js'
 import auth from '../auth/auth.js'
 import {hashHistory} from 'react-router'
-import {protectedGet} from '../common/requests.js'
 
 class Navigation extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            canStartTheHunting: true
-        }
-    }
-
-    componentDidMount() {
-        let that = this;
-        protectedGet('huntings?status=started')((err, res, body) => {
-            let loggedUserIsOnHunting = body.some(h => h.user._id === auth.loggedUser().userId);
-            that.setState({
-                canStartTheHunting: !loggedUserIsOnHunting
-            })
-        })
-    }
 
     logout() {
         auth.logout(() => {
@@ -46,7 +28,7 @@ class Navigation extends Component {
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav">
-                            {this.state.canStartTheHunting && <li><a href="#/hunting">Rozpocznij polowanie</a></li>}
+                            <li><a href="#/hunting">Rozpocznij polowanie</a></li>
                             <li><a href="#/huntings">Aktywne polowania</a></li>
                             <li><a href="#/archive">Archiwum</a></li>
                             <HasRole levelRequired="admin">
