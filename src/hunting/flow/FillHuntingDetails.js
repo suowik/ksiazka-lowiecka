@@ -21,7 +21,6 @@ export default class FillHuntingDetails extends Component {
 
     startHunting = (e) => {
         e.preventDefault();
-        console.log(e)
         let that = this;
         this.props.data.startHunting(() => {
             that.props.transitionHandler("next")

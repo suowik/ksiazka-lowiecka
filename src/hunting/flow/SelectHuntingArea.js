@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {protectedGet} from '../../common/requests.js'
+import auth from '../../auth/auth.js'
 
-import {GoogleMap, withGoogleMap, Marker, Circle} from "react-google-maps";
+import {GoogleMap, withGoogleMap, Circle} from "react-google-maps";
 
 
 const Map = withGoogleMap(props => (
@@ -10,7 +11,7 @@ const Map = withGoogleMap(props => (
         defaultCenter={new google.maps.LatLng(49.9965585, 20.7221137)}
         onClick={props.selectHuntingPlace}>
         {props.huntings.map(h => <Circle key={h.uniqueId} center={h.huntingSpot} radius={100}/>)}
-        <Circle center={props.hunting.huntingSpot} radius={100} />
+        <Circle center={props.hunting.huntingSpot} radius={100}/>
     </GoogleMap>
 ));
 
@@ -18,15 +19,20 @@ export default class SelectHuntingArea extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            huntings: []
+            huntings: [],
+            loading: true,
+            canStartTheHunting: false
         }
     }
 
     componentDidMount() {
         let that = this;
         protectedGet("huntings?status=started")((err, res, body) => {
+            let loggedUserIsOnHunting = body.some(h => h.user._id === auth.loggedUser().userId);
             that.setState({
-                huntings: body
+                huntings: body,
+                loading: false,
+                canStartTheHunting: !loggedUserIsOnHunting
             })
         })
     }
@@ -53,7 +59,12 @@ export default class SelectHuntingArea extends Component {
     render() {
         return (
             <div className="container">
+                {this.state.loading && <h4>Wczytywanie</h4>}
+                {!this.state.loading && !this.state.canStartTheHunting && <h4>Jesteś już na polowaniu</h4>}
+
+                {!this.state.loading && this.state.canStartTheHunting &&
                 <div className="row">
+
                     <div className="pull-right">
                         <button className="btn btn-primary"
                                 disabled={!this.isHuntingSpotValid(this.state.huntings, this.props.data.hunting.huntingSpot)}
@@ -61,7 +72,8 @@ export default class SelectHuntingArea extends Component {
                             Dalej
                         </button>
                     </div>
-                </div>
+                </div>}
+                {!this.state.loading && this.state.canStartTheHunting &&
                 <div className="row">
                     <Map
                         containerElement={
@@ -74,7 +86,7 @@ export default class SelectHuntingArea extends Component {
                         selectHuntingPlace={this.selectHuntingPlace}
                         huntings={this.state.huntings}
                     />
-                </div>
+                </div>}
             </div>
         )
     }
