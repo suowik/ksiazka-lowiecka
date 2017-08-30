@@ -39,7 +39,7 @@ export default class SelectHuntingArea extends Component {
 
     isHuntingSpotValid = (huntings, huntingSpot) => {
         let selectedHuntingSpot = this.props.data.hunting.huntingSpot;
-        let collisionSpots = huntings
+        let isInCollision = huntings
             .map(h => h.huntingSpot)
             .map(hs => {
                 let latDiff = (hs.lat * 1000) - (selectedHuntingSpot.lat * 1000);
@@ -47,8 +47,8 @@ export default class SelectHuntingArea extends Component {
                 let dx = latDiff * latDiff + lngDiff * lngDiff;
                 return Math.sqrt(dx);
             })
-            .filter(d => d < 2.7);
-        return collisionSpots.length === 0 && huntingSpot.lat > 0 && huntingSpot.lng > 0;
+            .some(d => d < 2.7);
+        return !isInCollision && huntingSpot.lat > 0 && huntingSpot.lng > 0;
     };
 
     selectHuntingPlace = (e) => {
