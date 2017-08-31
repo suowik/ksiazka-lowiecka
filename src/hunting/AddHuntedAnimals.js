@@ -37,7 +37,7 @@ class HuntedAnimal extends Component {
                 </td>
                 <td>
                     <input type="number"
-                           min="1"
+                           min="0"
                            className="form-control"
                            name="shots"
                            id="shots"
@@ -47,7 +47,7 @@ class HuntedAnimal extends Component {
                 <td>
                     <input
                         type="number"
-                        min="1"
+                        min="0"
                         className="form-control"
                         name="hunted"
                         id="hunted"
