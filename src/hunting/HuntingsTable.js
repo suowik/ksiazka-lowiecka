@@ -33,13 +33,24 @@ export default class HuntingsTable extends Component {
             <TableHeaderColumn dataField='start' dataSort={true}>Rozpoczęte</TableHeaderColumn>
             <TableHeaderColumn dataField='end' dataSort={true}>Zakończone</TableHeaderColumn>
             <TableHeaderColumn dataField='huntedAnimals' width={'25%'} dataFormat={(animals, hunting) =>
-                <ul>
+                <table className="table table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <td>Zwierzę</td>
+                            <td>oddane strzały</td>
+                            <td>ilość</td>
+                        </tr>
+                    </thead>
+                    <tbody>
                     {animals.map(animal => (
-                        <li
-                            key={animal._id}><strong>{animal.name}</strong> oddane strzały: {animal.shots}
-                            sztuk: {animal.hunted}</li>
+                        <tr key={animal._id}>
+                            <td>{animal.name}</td>
+                            <td>{animal.shots}</td>
+                            <td>{animal.hunted}</td>
+                        </tr>
                     ))}
-                </ul>
+                    </tbody>
+                </table>
             }>Upolowane zwierzęta</TableHeaderColumn>
             {this.props.renderActions && <TableHeaderColumn dataField='hunting'
                                                             dataFormat={(hunting, row) =>
