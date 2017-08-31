@@ -21,7 +21,7 @@ export default class SelectHuntingArea extends Component {
         this.state = {
             huntings: [],
             loading: true,
-            canStartTheHunting: false
+            canStartTheHunting: true
         }
     }
 
