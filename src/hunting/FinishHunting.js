@@ -23,7 +23,12 @@ export default class FinishHunting extends Component {
     }
 
     open() {
-        this.setState({showModal: true});
+        let now = moment();
+        this.setState({
+            showModal: true,
+            endDate: now.format("YYYY-MM-DD"),
+            endTime: now.format("HH:mm")
+        });
     }
 
     finishHunting(e) {
@@ -50,7 +55,8 @@ export default class FinishHunting extends Component {
                     <form onSubmit={this.finishHunting}>
                         <div className="form-group">
                             <label htmlFor="endHour">Godzina zakończenia</label>
-                            <input type="time" readOnly="readOnly"
+                            <input type="time"
+                                   readOnly="readOnly"
                                    defaultValue={this.state.endTime}
                                    className="form-control"
                                    id="endHour"
