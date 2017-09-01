@@ -86,7 +86,7 @@ export class HuntingZone extends Component {
             <Polygon paths={HUNTING_AREA_PATH} options={{
                 fillColor: `#80ff7f`,
                 fillOpacity: 0.0,
-                strokeWeight: 1,
+                strokeWeight: 2,
                 strokeColor: "#ff0000",
                 clickable: false,
                 editable: false
