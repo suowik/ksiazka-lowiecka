@@ -106,14 +106,16 @@ export default class AddHuntedAnimals extends Component {
     componentDidMount() {
         let that = this;
         protectedGet('/animals')((err, res, body) => {
-            let now = moment();
-            let animals = body.filter(animal => {
-                let from = moment([now.year(), animal.protection.from.month, animal.protection.from.day]);
-                let to = moment([now.year(), animal.protection.to.month, animal.protection.to.day]);
-                return now.isBetween(from, to)
-            });
+            /*
+             let now = moment();
+             let animals = body.filter(animal => {
+             let from = moment([now.year(), animal.protection.from.month, animal.protection.from.day]);
+             let to = moment([now.year(), animal.protection.to.month, animal.protection.to.day]);
+             return now.isBetween(from, to)
+             });
+             */
             that.setState({
-                animals: animals,
+                animals: body,
             })
         });
     }
