@@ -2,12 +2,14 @@ import React, {Component} from 'react'
 import {protectedGet} from '../common/requests.js'
 
 import {GoogleMap, withGoogleMap, Marker, Circle, InfoWindow} from "react-google-maps";
+import {HuntingZone} from '../common/huntingZone.js';
 
 
 const Map = withGoogleMap(props => (
     <GoogleMap
         defaultZoom={13}
         defaultCenter={new google.maps.LatLng(49.9965585, 20.7221137)}>
+        <HuntingZone/>
         {props.huntings.map(h => <Circle key={h.uniqueId} center={h.huntingSpot} radius={100}/>)}
         {props.huntings.map(h => {
             return <Marker key={h.uniqueId}

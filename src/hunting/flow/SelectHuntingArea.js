@@ -2,87 +2,8 @@ import React, {Component} from 'react'
 import {protectedGet} from '../../common/requests.js'
 import auth from '../../auth/auth.js'
 
-import {GoogleMap, withGoogleMap, Circle, Polygon} from "react-google-maps";
-
-
-const huntingArea = [
-    {
-        "lat": 50.02340247574832,
-        "lng": 20.718326568603516
-    },
-    {
-        "lat": 50.01435800141573,
-        "lng": 20.71695327758789
-    },
-    {
-        "lat": 50.01016608230595,
-        "lng": 20.714893341064453
-    },
-    {
-        "lat": 50.00619445321425,
-        "lng": 20.710773468017578
-    },
-    {
-        "lat": 50.00398785079544,
-        "lng": 20.70699691772461
-    },
-    {
-        "lat": 50.000898437231115,
-        "lng": 20.698070526123047
-    },
-    {
-        "lat": 49.99405688634991,
-        "lng": 20.679874420166016
-    },
-    {
-        "lat": 49.98412387053013,
-        "lng": 20.68777084350586
-    },
-    {
-        "lat": 49.97926698282594,
-        "lng": 20.688800811767578
-    },
-    {
-        "lat": 49.9671226182598,
-        "lng": 20.708026885986328
-    },
-    {
-        "lat": 49.964030836098594,
-        "lng": 20.75265884399414
-    },
-    {
-        "lat": 49.959392790500694,
-        "lng": 20.817203521728516
-    },
-    {
-        "lat": 49.97175991915481,
-        "lng": 20.792484283447266
-    },
-    {
-        "lat": 49.98125395069867,
-        "lng": 20.790081024169922
-    },
-    {
-        "lat": 49.99030465481344,
-        "lng": 20.78012466430664
-    },
-    {
-        "lat": 49.99405688634991,
-        "lng": 20.770511627197266
-    },
-    {
-        "lat": 50.008180308784,
-        "lng": 20.769824981689453
-    },
-    {
-        "lat": 50.021637833966786,
-        "lng": 20.760211944580078
-    },
-    {
-        "lat": 50.0260493168799,
-        "lng": 20.75094223022461
-    }
-];
+import {GoogleMap, withGoogleMap, Circle} from "react-google-maps";
+import {HuntingZone} from '../../common/huntingZone.js';
 
 const Map = withGoogleMap(props => (
     <GoogleMap
@@ -90,13 +11,7 @@ const Map = withGoogleMap(props => (
         defaultCenter={new google.maps.LatLng(49.9965585, 20.7221137)}
         onClick={props.selectHuntingPlace}>
         {props.huntings.map(h => <Circle key={h.uniqueId} center={h.huntingSpot} radius={100}/>)}
-        <Polygon paths={huntingArea} options={{
-            fillColor: `#80ff7f`,
-            fillOpacity: 0.2,
-            strokeWeight: 1,
-            clickable: false,
-            editable: false
-        }}/>
+        <HuntingZone/>
         <Circle center={props.hunting.huntingSpot} radius={100}/>
     </GoogleMap>
 ));
