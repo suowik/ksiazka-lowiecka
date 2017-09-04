@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import shortid from "shortid";
 import {protectedGet, protectedPost} from "../common/requests.js";
 import _ from "lodash";
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+
 
 class MonthSelect extends Component {
     render() {
@@ -58,8 +60,13 @@ export default class Animals extends Component {
     componentDidMount() {
         let that = this;
         protectedGet('/animals')((err, res, body) => {
+            let animals = body.map((animal, index) => {
+                if (animal.order === undefined) animal.order = index;
+                return animal
+            });
+            animals.sort((a1, a2) => a1.order - a2.order);
             that.setState({
-                animals: body
+                animals: animals
             });
         })
     }
@@ -69,60 +76,11 @@ export default class Animals extends Component {
             <div className="row">
                 <div className="col-lg-12">
                     <h4>Zwierzęta</h4>
-                    <table className="table table-striped">
-                        <thead>
-                        <tr>
-                            <td>
-                                <button className="btn btn-default btn-block" onClick={this.saveAnimals}>Zapisz</button>
-                            </td>
-                            <td>
-                                <button className="btn btn-default btn-block" onClick={this.addAnimal}>Dodaj zwierzę
-                                </button>
-                            </td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.state.animals.map(animal => <tr key={animal._id}>
-                            <td>
-                                <div><label htmlFor="name">Nazwa:</label>
-                                    <input type="text"
-                                           value={animal.name}
-                                           name="name"
-                                           className="form-control"
-                                           onChange={this.handleChange(animal)}/>
-                                </div>
-                            </td>
-                            <td>
-                                <MonthSelect name="protection.from.month"
-                                             label="Okres ochronny od (miesiąc):"
-                                             animal={animal}
-                                             value={animal.protection.from.month}
-                                             handleChange={this.handleChange}/>
-                            </td>
-                            <td>
-                                <DaySelect name="protection.from.day"
-                                           label="Okres ochronny od (dzień):"
-                                           animal={animal}
-                                           value={animal.protection.from.day}
-                                           handleChange={this.handleChange}/>
-                            </td>
-                            <td>
-                                <MonthSelect name="protection.to.month"
-                                             label="Okres ochronny do (miesiąc):"
-                                             animal={animal}
-                                             value={animal.protection.to.month}
-                                             handleChange={this.handleChange}/>
-                            </td>
-                            <td>
-                                <DaySelect name="protection.to.day"
-                                           label="Okres ochronny do (dzień):"
-                                           animal={animal}
-                                           value={animal.protection.to.day}
-                                           handleChange={this.handleChange}/>
-                            </td>
-                        </tr>)}
-                        </tbody>
-                    </table>
+                    <SortableComponent animals={this.state.animals}
+                                       handleChange={this.handleChange}
+                                       addAnimal={this.addAnimal}
+                                       saveAnimals={this.saveAnimals}
+                                       handleSort={this.handleSort}/>
                 </div>
             </div>
         );
@@ -135,6 +93,12 @@ export default class Animals extends Component {
             const value = e.target.value;
             this.withAnimal(animal, (_animal) => _.set(_animal, name, value))
         }
+    };
+
+    handleSort = (oldIndex, newIndex) => {
+        let animals = this.state.animals;
+        animals = arrayMove(animals, oldIndex, newIndex);
+        this.setState({animals: animals})
     };
 
     addAnimal = () => {
@@ -160,12 +124,97 @@ export default class Animals extends Component {
 
     saveAnimals = () => {
         let animals = this.state.animals;
-        animals.forEach(animal => {
+        animals.forEach((animal, index) => {
+            animal.order = index;
             protectedPost('/animals', animal)(() => {
             });
         });
     }
-
 }
 
+const SortableItem = SortableElement(({data}) =>
+    <tr>
+        <td>
+            <div><label htmlFor="name">Nazwa:</label>
+                <input type="text"
+                       value={data.animal.name}
+                       name="name"
+                       className="form-control"
+                       onChange={data.handleChange(data.animal)}/>
+            </div>
+        </td>
+        <td>
+            <MonthSelect name="protection.from.month"
+                         label="Okres ochronny od (miesiąc):"
+                         animal={data.animal}
+                         value={data.animal.protection.from.month}
+                         handleChange={data.handleChange}/>
+        </td>
+        <td>
+            <DaySelect name="protection.from.day"
+                       label="Okres ochronny od (dzień):"
+                       animal={data.animal}
+                       value={data.animal.protection.from.day}
+                       handleChange={data.handleChange}/>
+        </td>
+        <td>
+            <MonthSelect name="protection.to.month"
+                         label="Okres ochronny do (miesiąc):"
+                         animal={data.animal}
+                         value={data.animal.protection.to.month}
+                         handleChange={data.handleChange}/>
+        </td>
+        <td>
+            <DaySelect name="protection.to.day"
+                       label="Okres ochronny do (dzień):"
+                       animal={data.animal}
+                       value={data.animal.protection.to.day}
+                       handleChange={data.handleChange}/>
+        </td>
+    </tr>
+);
 
+
+const SortableList = SortableContainer(({data}) => {
+
+    return (
+        <table className="table table-striped">
+            <thead>
+            <tr>
+                <td>
+                    <button className="btn btn-default btn-block" onClick={data.saveAnimals}>Zapisz</button>
+                </td>
+                <td>
+                    <button className="btn btn-default btn-block" onClick={data.addAnimal}>Dodaj zwierzę
+                    </button>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            {data.animals.map((animal, index) => <SortableItem key={animal._id} index={index}
+                                                               data={{
+                                                                   handleChange: data.handleChange,
+                                                                   animal: animal
+                                                               }}/>)}
+            </tbody>
+        </table>
+    );
+});
+
+class SortableComponent extends Component {
+
+    onSortEnd = ({oldIndex, newIndex}) => {
+        this.props.handleSort(oldIndex, newIndex)
+    };
+
+    render() {
+        return <SortableList data={{
+            animals: this.props.animals,
+            saveAnimals: this.props.saveAnimals,
+            addAnimal: this.props.addAnimal,
+            handleChange: this.props.handleChange
+        }}
+                             onSortEnd={this.onSortEnd}
+        />;
+    }
+}

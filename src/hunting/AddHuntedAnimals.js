@@ -36,15 +36,6 @@ class HuntedAnimal extends Component {
                     </select>
                 </td>
                 <td>
-                    <input type="number"
-                           min="0"
-                           className="form-control"
-                           name="shots"
-                           id="shots"
-                           value={this.state.animal.shots}
-                           onChange={this.handleInputChange(this.state.animal._id, this.props.index)}/>
-                </td>
-                <td>
                     <input
                         type="number"
                         min="0"
@@ -54,6 +45,15 @@ class HuntedAnimal extends Component {
                         value={this.state.animal.hunted}
                         onChange={this.handleInputChange(this.state.animal._id, this.props.index)}
                     />
+                </td>
+                <td>
+                    <input type="number"
+                           min="0"
+                           className="form-control"
+                           name="shots"
+                           id="shots"
+                           value={this.state.animal.shots}
+                           onChange={this.handleInputChange(this.state.animal._id, this.props.index)}/>
                 </td>
             </tr>
         )
@@ -114,8 +114,10 @@ export default class AddHuntedAnimals extends Component {
              return now.isBetween(from, to)
              });
              */
+            let animals = body;
+            animals.sort((a1, a2) => a1.order - a2.order);
             that.setState({
-                animals: body,
+                animals: animals,
             })
         });
     }
@@ -156,8 +158,8 @@ export default class AddHuntedAnimals extends Component {
                                 <thead>
                                 <tr>
                                     <th>Zwierzę</th>
-                                    <th>Oddane strzały</th>
                                     <th>Ilość</th>
+                                    <th>Oddane strzały</th>
                                 </tr>
                                 </thead>
                                 <tbody>

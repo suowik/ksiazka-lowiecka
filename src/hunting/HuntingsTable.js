@@ -37,16 +37,17 @@ export default class HuntingsTable extends Component {
                     <thead>
                         <tr>
                             <td>Zwierzę</td>
-                            <td>oddane strzały</td>
                             <td>ilość</td>
+                            <td>oddane strzały</td>
                         </tr>
                     </thead>
                     <tbody>
                     {animals.map(animal => (
                         <tr key={animal._id}>
                             <td>{animal.name}</td>
-                            <td>{animal.shots}</td>
                             <td>{animal.hunted}</td>
+                            <td>{animal.shots}</td>
+
                         </tr>
                     ))}
                     </tbody>
