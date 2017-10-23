@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import SHA256 from 'crypto-js/sha256'
 import {hashHistory} from 'react-router'
-import {protectedPost} from '../common/requests.js'
+import {notProtectedPost} from '../common/requests.js'
 import FormGroup from '../common/FormGroup.js'
 
 
@@ -59,14 +59,14 @@ export default class Register extends Component {
             password: SHA256(this.state.formData.password).toString(),
             name: this.state.formData.name,
             surname: this.state.formData.surname,
-            active: false,
+            active: true,
             address: {
                 phone: this.state.formData.phone,
                 street: this.state.formData.street,
                 city: this.state.formData.city
             }
         };
-        protectedPost('/users', registrationData)((err, res, body) => {
+        notProtectedPost('/users', registrationData)((err, res, body) => {
             if (res.statusCode !== 200) {
                 this.setState({
                     isValid: false,

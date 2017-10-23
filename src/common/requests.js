@@ -25,3 +25,17 @@ export function protectedGet(endpoint) {
 export function protectedPost(endpoint, body) {
     return protectedRequest({method: 'post', endpoint: endpoint, body: body})
 }
+
+export function notProtectedPost(e, body) {
+    let config = {method: 'post', endpoint: e, body: body};
+    let endpoint = config.endpoint.startsWith('/') ? config.endpoint : '/' + config.endpoint;
+    let reqConfig = {
+        method: config.method,
+        url: API_URL + endpoint,
+        body: config.body,
+        json: true
+    };
+    return (cb) => {
+        request(reqConfig, (err, res, body) => cb(err, res, body))
+    }
+}
