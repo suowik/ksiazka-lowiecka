@@ -1,6 +1,8 @@
 let path = require('path');
 let webpack = require('webpack');
 
+const apiUrl = process.env.API_URL || "https://hunting-book-api.herokuapp.com";
+
 module.exports = {
     entry: './src/index.js',
     devtool: 'sourcemaps',
@@ -18,7 +20,7 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                'API_URL': JSON.stringify(process.env.API_URL)
+                'API_URL': JSON.stringify(apiUrl)
             }
         })
     ],

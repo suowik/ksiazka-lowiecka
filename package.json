@@ -30,6 +30,7 @@
     "webpack": "^3.2.0"
   },
   "scripts": {
+    "start:dev": "webpack-dev-server",
     "start": "node server.js",
     "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "eject": "react-scripts eject"

@@ -4,10 +4,11 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table'
 import FinishHunting from "./FinishHunting.js";
 import AddHuntedAnimals from "./AddHuntedAnimals.js";
 
+
 export default class HuntingsTable extends Component {
     render() {
         return (<BootstrapTable
-            data={this.props.huntings}
+            data={this.props.huntings.filter(h => h.user !== undefined)}
             striped
             options={
                 {
@@ -35,11 +36,11 @@ export default class HuntingsTable extends Component {
             <TableHeaderColumn dataField='huntedAnimals' width={'25%'} dataFormat={(animals, hunting) =>
                 <table className="table table-condensed table-striped">
                     <thead>
-                        <tr>
-                            <td>Zwierzę</td>
-                            <td>ilość</td>
-                            <td>oddane strzały</td>
-                        </tr>
+                    <tr>
+                        <td>Zwierzę</td>
+                        <td>ilość</td>
+                        <td>oddane strzały</td>
+                    </tr>
                     </thead>
                     <tbody>
                     {animals.map(animal => (
@@ -59,7 +60,7 @@ export default class HuntingsTable extends Component {
                                                                     {row.status !== "finished" && row.user._id === this.props.userId
                                                                     && <AddHuntedAnimals hunting={row}
                                                                                          postHook={this.props.postHook}/>}
-                                                                    <br />
+                                                                    <br/>
                                                                     {row.status === "started" && row.user._id === this.props.userId
                                                                     && <FinishHunting hunting={row}
                                                                                       postCreate={this.props.postHook}/>}
