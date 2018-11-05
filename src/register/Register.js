@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import SHA256 from 'crypto-js/sha256'
 import {hashHistory} from 'react-router'
-import {notProtectedPost} from '../common/requests.js'
+import {notProtectedPost, notProtectedGet} from '../common/requests.js'
 import FormGroup from '../common/FormGroup.js'
 
 
@@ -24,9 +24,10 @@ export default class Register extends Component {
         };
         this.register = this.register.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.checkEmailUniqueness = this.checkEmailUniqueness.bind(this);
     }
 
-    handleInputChange(e) {
+    handleInputChange = (e) => {
         const target = e.target;
         const value = target.value;
         const name = target.name;
@@ -36,47 +37,66 @@ export default class Register extends Component {
             formData: formData
         })
 
-    }
+    };
 
-    register(e) {
-        e.preventDefault();
-        if (this.state.formData.password !== this.state.formData.repeatPassword) {
-            this.setState({
-                isValid: false,
-                validationMessage: "Podane hasła różnią się",
-                formData: {
-                    repeatPassword: ""
-                }
-            });
-            return;
-        } else {
-            this.setState({
-                isValid: true
-            })
-        }
-        let registrationData = {
-            login: this.state.formData.login,
-            password: SHA256(this.state.formData.password).toString(),
-            name: this.state.formData.name,
-            surname: this.state.formData.surname,
-            active: false,
-            address: {
-                phone: this.state.formData.phone,
-                street: this.state.formData.street,
-                city: this.state.formData.city
-            }
-        };
-        notProtectedPost('/users', registrationData)((err, res, body) => {
-            if (res.statusCode !== 200) {
-                this.setState({
-                    isValid: false,
-                    validationMessage: "Taki użytkownik już istnieje"
-                });
+    checkEmailUniqueness(login, cb) {
+        let that = this;
+        notProtectedGet(`/users/exists/${login}`)((err, res, body) => {
+            console.log(body)
+            if (body.exists !== true) {
+                cb()
             } else {
-                hashHistory.push('/login')
+                that.setState({
+                    isValid: false,
+                    validationMessage: "Wybrany e-mail już istnieje"
+                });
             }
         });
     }
+
+    register = (e) => {
+        e.preventDefault();
+        let that = this;
+
+        this.checkEmailUniqueness(this.state.formData.login, () => {
+            if (this.state.formData.password !== this.state.formData.repeatPassword) {
+                that.setState({
+                    isValid: false,
+                    validationMessage: "Podane hasła różnią się",
+                    formData: {
+                        repeatPassword: ""
+                    }
+                });
+                return;
+            } else {
+                that.setState({
+                    isValid: true
+                })
+            }
+            let registrationData = {
+                login: that.state.formData.login,
+                password: SHA256(that.state.formData.password).toString(),
+                name: that.state.formData.name,
+                surname: that.state.formData.surname,
+                active: false,
+                address: {
+                    phone: that.state.formData.phone,
+                    street: that.state.formData.street,
+                    city: that.state.formData.city
+                }
+            };
+            notProtectedPost('/users', registrationData)((err, res, body) => {
+                if (res.statusCode !== 200) {
+                    that.setState({
+                        isValid: false,
+                        validationMessage: "Taki użytkownik już istnieje"
+                    });
+                } else {
+                    hashHistory.push('/login')
+                }
+            });
+        })
+    };
 
     render() {
         return (

@@ -49,7 +49,7 @@ class Login extends Component {
                 <div className="panel-heading">Zaloguj się</div>
                 <div className="panel-body">
                     {this.state.error && (
-                        <div className="alert alert-warning" role="alert">Niepoprawne dane</div>
+                        <div className="alert alert-warning" role="alert">Niepoprawne dane lub konto nieaktywne</div>
                     )}
                     <form onSubmit={this.handleSubmit}>
                         <div className="form-group">
