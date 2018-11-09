@@ -11,6 +11,7 @@ import Huntings from './hunting/Huntings.js'
 import HuntingAreas from './huntingAreas/HuntingAreas.js'
 import Animals from './animals/Animals.js'
 import Users from './users/Users.js'
+import Announcements from './announcements/Announcements.js';
 
 import auth from './auth/auth.js';
 
@@ -31,7 +32,7 @@ class Routes extends Component {
             <Router history={hashHistory}>
                 <Route path="/archive" component={Layout} onEnter={requireAuth}>
                     <IndexRoute component={HuntingBook} />
-                    <Route path="/" component={HuntingBook} />
+                    <Route path="/" component={Huntings} />
                 </Route>
                 <Route path="/huntings" component={Layout} onEnter={requireAuth}>
                     <IndexRoute component={Huntings} />
@@ -49,6 +50,9 @@ class Routes extends Component {
                 </Route>
                 <Route path="/users" component={Layout}>
                     <IndexRoute component={Users} />
+                </Route>
+                <Route path="/announcements" component={Layout}>
+                    <IndexRoute component={Announcements} />
                 </Route>
 
                 <Route path="/register" component={Register}/>

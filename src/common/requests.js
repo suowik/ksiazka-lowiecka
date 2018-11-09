@@ -22,6 +22,10 @@ export function protectedGet(endpoint) {
     return protectedRequest({method: 'get', endpoint: endpoint, body: null})
 }
 
+export function protectedDelete(endpoint, body) {
+    return protectedRequest({method: 'delete', endpoint: endpoint, body: body})
+}
+
 export function protectedPost(endpoint, body) {
     return protectedRequest({method: 'post', endpoint: endpoint, body: body})
 }

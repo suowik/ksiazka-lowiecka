@@ -78,6 +78,7 @@ export default class Huntings extends Component {
         return (
             <div className="container">
                 <div className="row">
+                    <h3>Polowania</h3>
                     <Map
                         containerElement={
                             <div style={{height: `500px`}}/>

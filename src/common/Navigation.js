@@ -31,6 +31,7 @@ class Navigation extends Component {
                             <li><a href="#/hunting">Rozpocznij polowanie</a></li>
                             <li><a href="#/huntings">Aktywne polowania</a></li>
                             <li><a href="#/archive">Archiwum</a></li>
+                            <li><a href="#/announcements">Informacje/ogłoszenia</a></li>
                             <HasRole levelRequired="admin">
                                 <li><a href="#/animals">Definicje zwierząt</a></li>
                             </HasRole>
