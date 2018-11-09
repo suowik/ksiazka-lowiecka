@@ -42,7 +42,6 @@ export default class Register extends Component {
     checkEmailUniqueness(login, cb) {
         let that = this;
         notProtectedGet(`/users/exists/${login}`)((err, res, body) => {
-            console.log(body)
             if (body.exists !== true) {
                 cb()
             } else {

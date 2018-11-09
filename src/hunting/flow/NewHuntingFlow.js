@@ -74,7 +74,7 @@ export default class NewHuntingFlow extends Flow {
     startHunting = (cb) => {
         let form = this.state.hunting;
         let start = form.startDate + ' ' + form.startHour;
-        let end = moment(start).add(form.durationInHours, 'hours').minutes(0).format('YYYY-MM-DD HH:mm');
+        let end = moment(start).add(form.durationInHours, 'hours').format('YYYY-MM-DD HH:mm');
         let hunting = {
             userId: form.userId,
             status: 'started',
