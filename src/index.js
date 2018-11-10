@@ -7,7 +7,7 @@ import Layout from './Layout.js'
 import Register from './register/Register.js'
 
 import HuntingBook from './hunting/HuntingBook.js'
-import Huntings from './hunting/Huntings.js'
+import HuntingsComponent from './hunting/HuntingsComponent.js'
 import HuntingAreas from './huntingAreas/HuntingAreas.js'
 import Animals from './animals/Animals.js'
 import Users from './users/Users.js'
@@ -32,11 +32,11 @@ class Routes extends Component {
             <Router history={hashHistory}>
                 <Route path="/archive" component={Layout} onEnter={requireAuth}>
                     <IndexRoute component={HuntingBook} />
-                    <Route path="/" component={Huntings} />
+                    <Route path="/" component={HuntingsComponent} />
                 </Route>
                 <Route path="/huntings" component={Layout} onEnter={requireAuth}>
-                    <IndexRoute component={Huntings} />
-                    <Route path="/" component={Huntings} />
+                    <IndexRoute component={HuntingsComponent} />
+                    <Route path="/" component={HuntingsComponent} />
                 </Route>
                 <Route path="/hunting" component={Layout} onEnter={requireAuth}>
                     <IndexRoute component={NewHuntingFlow} />
