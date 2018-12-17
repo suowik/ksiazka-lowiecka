@@ -15,7 +15,7 @@ export default class HuntingsComponent extends Component {
             filterCriteria: {
                 status: "started",
                 start: moment().subtract(1, 'd').format("YYYY-MM-DD"),
-                end: moment().add(1, 'd').format("YYYY-MM-DD"),
+                end: moment().add(2, 'd').format("YYYY-MM-DD"),
                 hunter: ""
             },
             filters: [
